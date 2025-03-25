@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import { Bookmark } from "../../types";
 import { gsap } from "gsap";
-import { ExternalLink, Edit, Trash2 } from "lucide-react";
 import Link from "next/link";
 
 interface BookmarkItemProps {
@@ -72,7 +71,20 @@ export const BookmarkItem = ({
                 className="flex items-center"
               >
                 {bookmark.title}
-                <ExternalLink className="ml-1 h-3 w-3 inline-block text-gray-400" />
+                <svg
+                  className="ml-1 h-3 w-3 inline-block text-gray-400"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                  <polyline points="15 3 21 3 21 9" />
+                  <line x1="10" y1="14" x2="21" y2="3" />
+                </svg>
               </a>
             </h3>
             <div className="text-xs text-gray-500 flex items-center">
@@ -98,14 +110,40 @@ export const BookmarkItem = ({
             className="text-gray-400 hover:text-blue-600 transition-colors p-1.5 rounded-full hover:bg-blue-50"
             aria-label="Edit bookmark"
           >
-            <Edit className="h-4 w-4" />
+            <svg
+              className="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+            </svg>
           </button>
           <button
             onClick={handleDelete}
             className="text-gray-400 hover:text-red-600 transition-colors p-1.5 rounded-full hover:bg-red-50"
             aria-label="Delete bookmark"
           >
-            <Trash2 className="h-4 w-4" />
+            <svg
+              className="h-4 w-4"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <polyline points="3 6 5 6 21 6" />
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+              <line x1="10" y1="11" x2="10" y2="17" />
+              <line x1="14" y1="11" x2="14" y2="17" />
+            </svg>
           </button>
         </div>
       </div>

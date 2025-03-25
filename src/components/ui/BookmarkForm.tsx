@@ -3,18 +3,6 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Bookmark } from "../../types";
 import { gsap } from "gsap";
-import {
-  Plus,
-  Link2,
-  CheckCircle,
-  AlertCircle,
-  Globe,
-  MessageSquare,
-  X,
-  Check,
-  Loader2,
-  FileEdit,
-} from "lucide-react";
 
 interface BookmarkFormProps {
   editBookmark?: Bookmark;
@@ -193,19 +181,54 @@ export const BookmarkForm = ({
         className="absolute top-4 right-4 opacity-0 pointer-events-none"
       >
         <div className="bg-green-100 text-green-500 p-2 rounded-full">
-          <Check className="w-5 h-5" />
+          <svg
+            className="w-5 h-5"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
         </div>
       </div>
 
       <h2 className="text-xl font-bold mb-6 text-blue-600 flex items-center">
         {editBookmark ? (
           <>
-            <FileEdit className="h-5 w-5 mr-2" />
+            <svg
+              className="h-5 w-5 mr-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M12 20h9" />
+              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+            </svg>
             Edit Bookmark
           </>
         ) : (
           <>
-            <Plus className="h-5 w-5 mr-2" />
+            <svg
+              className="h-5 w-5 mr-2"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="12" y1="5" x2="12" y2="19" />
+              <line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
             Add Bookmark
           </>
         )}
@@ -216,7 +239,20 @@ export const BookmarkForm = ({
           ref={errorRef}
           className="bg-red-50 border-l-4 border-red-400 text-red-700 p-4 rounded mb-6 flex items-start"
         >
-          <AlertCircle className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0" />
+          <svg
+            className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="12" cy="12" r="10" />
+            <line x1="12" y1="8" x2="12" y2="12" />
+            <line x1="12" y1="16" x2="12.01" y2="16" />
+          </svg>
           <span>{error}</span>
         </div>
       )}
@@ -227,12 +263,37 @@ export const BookmarkForm = ({
             htmlFor="url"
             className="block text-gray-700 font-medium mb-2 text-sm flex items-center"
           >
-            <Link2 className="h-4 w-4 mr-1 text-blue-500" />
+            <svg
+              className="h-4 w-4 mr-1 text-blue-500"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+            </svg>
             URL
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Globe className="h-5 w-5 text-gray-400" />
+              <svg
+                className="h-5 w-5 text-gray-400"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="2" y1="12" x2="22" y2="12" />
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+              </svg>
             </div>
             <input
               ref={urlInputRef}
@@ -252,56 +313,114 @@ export const BookmarkForm = ({
             htmlFor="title"
             className="block text-gray-700 font-medium mb-2 text-sm flex items-center"
           >
-            <MessageSquare className="h-4 w-4 mr-1 text-blue-500" />
+            <svg
+              className="h-4 w-4 mr-1 text-blue-500"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              xmlns="http://www.w3.org/2000/svg"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
             Title
           </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <MessageSquare className="h-5 w-5 text-gray-400" />
-            </div>
-            <input
-              type="text"
-              id="title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Website Title"
-              className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-gray-800 bg-gray-50 hover:bg-white focus:bg-white"
-            />
-          </div>
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Enter a title for this bookmark"
+            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-gray-800 bg-gray-50 hover:bg-white focus:bg-white"
+            required
+          />
         </div>
-      </div>
 
-      <div className="flex justify-end space-x-3 mt-8">
-        {onCancel && (
-          <button
-            type="button"
-            onClick={onCancel}
-            className="flex items-center px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium shadow-sm"
-            disabled={isSubmitting}
-          >
-            <X className="h-4 w-4 mr-1.5" />
-            Cancel
-          </button>
-        )}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className={`flex items-center px-5 py-2.5 bg-blue-500 text-white rounded-lg shadow-sm hover:bg-blue-600 hover:shadow transition-all ${
-            isSubmitting ? "opacity-70 cursor-not-allowed" : ""
-          } text-sm font-medium`}
-        >
-          {isSubmitting ? (
-            <>
-              <Loader2 className="animate-spin h-4 w-4 mr-2 text-white" />
-              {editBookmark ? "Updating..." : "Adding..."}
-            </>
-          ) : (
-            <>
-              <Check className="h-4 w-4 mr-1.5" />
-              {editBookmark ? "Update" : "Add"}
-            </>
+        <div className="flex justify-between space-x-4 mt-6">
+          {editBookmark && onCancel && (
+            <button
+              type="button"
+              onClick={onCancel}
+              className="px-4 py-2 flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 flex items-center justify-center"
+            >
+              <svg
+                className="w-4 h-4 mr-2"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+              Cancel
+            </button>
           )}
-        </button>
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className={`px-4 py-2 ${
+              editBookmark && onCancel ? "flex-1" : "w-full"
+            } bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-center`}
+          >
+            {isSubmitting ? (
+              <svg
+                className="w-5 h-5 mr-2 animate-spin"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="12" y1="2" x2="12" y2="6" />
+                <line x1="12" y1="18" x2="12" y2="22" />
+                <line x1="4.93" y1="4.93" x2="7.76" y2="7.76" />
+                <line x1="16.24" y1="16.24" x2="19.07" y2="19.07" />
+                <line x1="2" y1="12" x2="6" y2="12" />
+                <line x1="18" y1="12" x2="22" y2="12" />
+                <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
+                <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
+              </svg>
+            ) : editBookmark ? (
+              <svg
+                className="w-5 h-5 mr-2"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                <polyline points="17 21 17 13 7 13 7 21" />
+                <polyline points="7 3 7 8 15 8" />
+              </svg>
+            ) : (
+              <svg
+                className="w-5 h-5 mr-2"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <polyline points="12 6 12 12 16 14" />
+              </svg>
+            )}
+            {editBookmark ? "Update Bookmark" : "Save Bookmark"}
+          </button>
+        </div>
       </div>
     </form>
   );

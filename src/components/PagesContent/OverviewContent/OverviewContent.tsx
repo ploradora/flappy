@@ -13,7 +13,6 @@ import {
   deleteBookmark,
 } from "@/app/actions";
 import Link from "next/link";
-import { PlusCircle } from "lucide-react";
 
 export const OverviewContent = () => {
   const pageRef = useRef<HTMLDivElement>(null);
@@ -136,21 +135,70 @@ export const OverviewContent = () => {
         <BookmarkForm onSubmit={handleAddBookmark} />
       )}
 
-      <div className="flex justify-center mb-8 w-full gap-4">
+      <div className="flex justify-center mb-8 w-full gap-4 px-6 py-6">
         <Link
           href="/submit"
           className="flex items-center justify-center px-5 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition w-full"
         >
-          <PlusCircle className="w-5 h-5 mr-2" />
+          <svg
+            className="w-5 h-5 mr-2"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
+            <line
+              x1="12"
+              y1="8"
+              x2="12"
+              y2="16"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <line
+              x1="8"
+              y1="12"
+              x2="16"
+              y2="12"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
           Check URL
         </Link>
         <Link
           href="/results"
           className="flex items-center justify-center px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition w-full"
         >
-          <span className="w-5 h-5 mr-2 flex items-center justify-center">
-            ✓
-          </span>
+          <svg
+            className="w-5 h-5 mr-2"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
+            <path
+              d="M8 12L11 15L16 9"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
           View Results
         </Link>
       </div>

@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { gsap } from "gsap";
-import { ArrowLeft, CheckCircle } from "lucide-react";
 
 export const ResultsContent = () => {
   const router = useRouter();
@@ -117,7 +116,19 @@ export const ResultsContent = () => {
                 href="/overview"
                 className="overview-link inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all transform hover:-translate-y-1 hover:shadow-lg"
               >
-                <ArrowLeft className="w-5 h-5 mr-2" />
+                <svg
+                  className="w-5 h-5 mr-2"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="19" y1="12" x2="5" y2="12" />
+                  <polyline points="12 19 5 12 12 5" />
+                </svg>
                 Return to Overview
               </Link>
             </div>
