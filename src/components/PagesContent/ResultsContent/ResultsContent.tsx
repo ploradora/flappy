@@ -79,7 +79,7 @@ export const ResultsContent = () => {
       if (link) {
         tl.fromTo(
           link,
-          { y: 20, opacity: 0 },
+          { y: -20, opacity: 0 },
           {
             y: 0,
             opacity: 1,
@@ -101,16 +101,9 @@ export const ResultsContent = () => {
       className="min-h-[85vh] flex items-center justify-center px-4 py-12 bg-gradient-to-b from-gray-50 to-white"
     >
       <div ref={cardRef} className="w-full max-w-xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
+        <div className="bg-white rounded-xl shadow-xl overflow-hidden mb-8">
           {/* Header section with icon */}
-          <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-8 py-10 text-center relative">
-            <div
-              ref={iconRef}
-              className="absolute left-1/2 top-0 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-full p-4 shadow-lg"
-            >
-              <CheckCircle className="h-12 w-12 text-blue-500" />
-            </div>
-
+          <div className="bg-blue-500 text-white px-8 py-10 text-center relative">
             <h1 className="text-3xl font-bold mt-6 mb-2">Thank You!</h1>
             <p className="text-blue-100 text-lg">
               Your submission has been received successfully
@@ -119,7 +112,7 @@ export const ResultsContent = () => {
 
           {/* Submission details */}
           <div className="px-8 py-8">
-            <div className="text-center mt-8">
+            <div className="text-center">
               <Link
                 href="/overview"
                 className="overview-link inline-flex items-center justify-center px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-all transform hover:-translate-y-1 hover:shadow-lg"

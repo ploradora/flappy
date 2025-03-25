@@ -71,20 +71,20 @@ export const shake = (element: HTMLElement, amplitude = 5) => {
 export const showSuccessMessage = (element: HTMLElement, autoHide = true) => {
   gsap.fromTo(
     element,
-    { opacity: 0, y: -20 },
+    { opacity: 0, y: 20 },
     {
       opacity: 1,
       y: 0,
-      duration: 0.5,
-      ease: "power3.out",
+      duration: 0.4,
+      ease: "power2.out",
       onComplete: () => {
         if (autoHide) {
           gsap.to(element, {
             opacity: 0,
-            y: -20,
-            duration: 0.5,
-            delay: 2,
-            ease: "power3.in",
+            y: 20,
+            duration: 0.3,
+            delay: 1.8,
+            ease: "power2.in",
           });
         }
       },

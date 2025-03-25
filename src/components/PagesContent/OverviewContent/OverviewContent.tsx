@@ -112,13 +112,17 @@ export const OverviewContent = () => {
   };
 
   return (
-    <div ref={pageRef} className="container relative mx-auto px-4 py-8 max-w-[670px]">
+    <div
+      ref={pageRef}
+      className="container relative mx-auto px-4 py-8 max-w-[670px]"
+    >
       {/* Success indicator (initially hidden) */}
       <div
         ref={successIndicatorRef}
-        className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-md shadow-lg opacity-0 transform translate-y-[-10px] z-50"
+        className="fixed bottom-16 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 px-5 py-3 rounded-full shadow-md opacity-0 z-50 flex items-center border border-gray-100"
       >
-        Bookmark saved successfully!
+        <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2"></span>
+        Bookmark saved
       </div>
 
       {/* Bookmark form */}
@@ -132,13 +136,22 @@ export const OverviewContent = () => {
         <BookmarkForm onSubmit={handleAddBookmark} />
       )}
 
-      <div className="flex justify-center mb-8 w-full">
+      <div className="flex justify-center mb-8 w-full gap-4">
         <Link
           href="/submit"
-          className="flex items-center px-5 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition w-full"
+          className="flex items-center justify-center px-5 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition w-full"
         >
           <PlusCircle className="w-5 h-5 mr-2" />
           Check URL
+        </Link>
+        <Link
+          href="/results"
+          className="flex items-center justify-center px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition w-full"
+        >
+          <span className="w-5 h-5 mr-2 flex items-center justify-center">
+            ✓
+          </span>
+          View Results
         </Link>
       </div>
 
