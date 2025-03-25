@@ -58,9 +58,7 @@ export const BookmarkItem = ({
       <div className="flex justify-between items-center">
         <div className="flex items-center flex-grow min-w-0 pr-3">
           <div
-            className={`flex-shrink-0 w-10 h-10 rounded-full bg-blue-400 ${
-              bookmark.title
-            } text-white flex items-center justify-center font-medium mr-3 text-lg shadow-sm`}
+            className={`flex-shrink-0 w-10 h-10 rounded-full bg-blue-400 ${bookmark.title} text-white flex items-center justify-center font-medium mr-3 text-lg shadow-sm`}
           >
             {getInitial(bookmark.title)}
           </div>

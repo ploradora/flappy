@@ -20,14 +20,12 @@ export default function RootLayout({
       <body
         className={`${inter.className} bg-gray-50 min-h-screen flex flex-col`}
       >
-        <header className="bg-white shadow-sm">
-          <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 className="text-xl font-bold text-blue-600">
+        <header className="bg-white shadow-sm py-3">
+            <h1 className="text-xl font-bold text-blue-600 text-center">
               <Link href="/" className="hover:text-blue-800 transition-colors">
                 Bookmark Manager
               </Link>
             </h1>
-          </div>
         </header>
 
         <main className="flex-grow">{children}</main>

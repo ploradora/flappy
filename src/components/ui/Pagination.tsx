@@ -27,26 +27,6 @@ export const Pagination = ({
     }
   }, []);
 
-  // Animate page button hover
-  const handleButtonHover = (e: React.MouseEvent<HTMLButtonElement>) => {
-    gsap.to(e.currentTarget, {
-      backgroundColor: "#f3f4f6", // Very light gray
-      color: "#4b5563", // Medium gray
-      duration: 0.2,
-    });
-  };
-
-  const handleButtonLeave = (
-    e: React.MouseEvent<HTMLButtonElement>,
-    isActive: boolean
-  ) => {
-    gsap.to(e.currentTarget, {
-      backgroundColor: isActive ? "#e5e7eb" : "#f9fafb", // Light gray for active, very light gray for inactive
-      color: isActive ? "#4b5563" : "#6b7280", // Medium gray for active, gray for inactive
-      duration: 0.2,
-    });
-  };
-
   // Generate page numbers to display
   const getPageNumbers = () => {
     const pageNumbers = [];
@@ -102,8 +82,6 @@ export const Pagination = ({
             ? "text-gray-300 cursor-not-allowed"
             : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         }`}
-        onMouseEnter={currentPage !== 1 ? handleButtonHover : undefined}
-        onMouseLeave={(e) => currentPage !== 1 && handleButtonLeave(e, false)}
         aria-label="Previous page"
       >
         <ChevronLeft className="h-4 w-4" />
@@ -126,8 +104,6 @@ export const Pagination = ({
                 ? "bg-gray-100 text-gray-700 border border-gray-200"
                 : "bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-700"
             }`}
-            onMouseEnter={handleButtonHover}
-            onMouseLeave={(e) => handleButtonLeave(e, page === currentPage)}
             aria-label={`Page ${page}`}
             aria-current={page === currentPage ? "page" : undefined}
           >
@@ -146,12 +122,6 @@ export const Pagination = ({
             ? "text-gray-300 cursor-not-allowed"
             : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         }`}
-        onMouseEnter={
-          currentPage !== totalPages ? handleButtonHover : undefined
-        }
-        onMouseLeave={(e) =>
-          currentPage !== totalPages && handleButtonLeave(e, false)
-        }
         aria-label="Next page"
       >
         <ChevronRight className="h-4 w-4" />

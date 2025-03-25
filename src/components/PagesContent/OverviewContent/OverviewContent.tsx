@@ -112,15 +112,11 @@ export const OverviewContent = () => {
   };
 
   return (
-    <div ref={pageRef} className="container mx-auto px-4 py-8 max-w-[670px]">
-      <h1 className="page-title text-3xl font-bold mb-10 text-center text-gray-800">
-        <span className="text-blue-600">Bookmark</span> Manager
-      </h1>
-
+    <div ref={pageRef} className="container relative mx-auto px-4 py-8 max-w-[670px]">
       {/* Success indicator (initially hidden) */}
       <div
         ref={successIndicatorRef}
-        className="success-indicator fixed top-4 right-4 bg-green-600 text-white px-4 py-2 rounded-md shadow-lg opacity-0 transform translate-y-[-10px] z-50"
+        className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-md shadow-lg opacity-0 transform translate-y-[-10px] z-50"
       >
         Bookmark saved successfully!
       </div>
@@ -145,7 +141,6 @@ export const OverviewContent = () => {
           Check URL
         </Link>
       </div>
-
 
       {/* Bookmarks list with pagination */}
       <BookmarksList
