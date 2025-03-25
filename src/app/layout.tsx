@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -16,23 +17,25 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-gray-50 min-h-screen flex flex-col`}>
+      <body
+        className={`${inter.className} bg-gray-50 min-h-screen flex flex-col`}
+      >
         <header className="bg-white shadow-sm">
           <div className="container mx-auto px-4 py-4 flex justify-between items-center">
             <h1 className="text-xl font-bold text-blue-600">
-              <a href="/" className="hover:text-blue-800 transition-colors">
+              <Link href="/" className="hover:text-blue-800 transition-colors">
                 Bookmark Manager
-              </a>
+              </Link>
             </h1>
             <nav>
               <ul className="flex space-x-6">
                 <li>
-                  <a
+                  <Link
                     href="/overview"
                     className="text-gray-600 hover:text-blue-600 transition-colors"
                   >
                     Overview
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </nav>
