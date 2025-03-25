@@ -95,6 +95,15 @@ export const SubmitContent = () => {
       // Show success animation regardless
       setSuccess(true);
 
+      // Redirect to results page if URL is valid and doesn't exist
+      if (!exists) {
+        // Get domain name for title if not provided by user
+        const domain = new URL(formattedUrl).hostname;
+        setTimeout(() => {
+          router.push(`/results?url=${encodeURIComponent(formattedUrl)}&title=${encodeURIComponent(domain)}`);
+        }, 2000);
+      }
+
       // Animate success and the result message
       if (successRef.current) {
         gsap.fromTo(
