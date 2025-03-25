@@ -17,11 +17,18 @@ export const ResultsContent = () => {
     title: "",
   });
 
-  useEffect(() => {
-    // Get URL parameters if available
-    const url = searchParams.get("url") || "";
-    const title = searchParams.get("title") || "";
+  // Extract search params safely
+  const getSearchParams = () => {
+    if (!searchParams) return { url: "", title: "" };
+    return {
+      url: searchParams.get("url") || "",
+      title: searchParams.get("title") || "",
+    };
+  };
 
+  useEffect(() => {
+    // Get URL parameters with safe extraction
+    const { url, title } = getSearchParams();
     setSubmissionData({ url, title });
 
     // Run animations after component mounts
@@ -103,6 +110,23 @@ export const ResultsContent = () => {
         <div className="bg-white rounded-xl shadow-xl overflow-hidden mb-8">
           {/* Header section with icon */}
           <div className="bg-blue-500 text-white px-8 py-10 text-center relative">
+            <div
+              ref={iconRef}
+              className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mt-1"
+            >
+              <svg
+                className="w-10 h-10 text-green-500"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                strokeWidth="3"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
             <h1 className="text-3xl font-bold mt-6 mb-2">Thank You!</h1>
             <p className="text-blue-100 text-lg">
               Your submission has been received successfully
@@ -110,7 +134,7 @@ export const ResultsContent = () => {
           </div>
 
           {/* Submission details */}
-          <div className="px-8 py-8">
+          <div ref={detailsRef} className="px-8 py-8">
             <div className="text-center">
               <Link
                 href="/overview"
