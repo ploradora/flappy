@@ -186,7 +186,7 @@ export const BookmarkForm = ({
     <form
       ref={formRef}
       onSubmit={handleSubmit}
-      className="bg-white p-6 rounded-xl shadow-md mb-8 border border-gray-100 transition-all hover:shadow-lg relative overflow-hidden"
+      className="bg-white p-6 rounded-lg shadow-md mb-4 border border-gray-100 transition-all hover:shadow-lg relative overflow-hidden"
     >
       <div
         ref={successIconRef}
@@ -266,7 +266,6 @@ export const BookmarkForm = ({
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Website Title"
               className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-gray-800 bg-gray-50 hover:bg-white focus:bg-white"
-              required
             />
           </div>
         </div>

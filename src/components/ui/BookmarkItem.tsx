@@ -28,6 +28,11 @@ export const BookmarkItem = ({
     });
   };
 
+  // Get initial letter and generate a color based on the title
+  const getInitial = (title: string): string => {
+    return title.charAt(0).toUpperCase();
+  };
+
   const handleDelete = () => {
     if (itemRef.current) {
       // Animate out before deleting
@@ -37,7 +42,7 @@ export const BookmarkItem = ({
         height: 0,
         marginBottom: 0,
         padding: 0,
-        duration: 0.3,
+        duration: 0.25,
         onComplete: () => onDelete(bookmark.id),
       });
     } else {
@@ -45,57 +50,47 @@ export const BookmarkItem = ({
     }
   };
 
-  // Handle hover effects
-  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    gsap.to(e.currentTarget, {
-      y: -3,
-      boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
-      duration: 0.3,
-    });
-  };
-
-  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    gsap.to(e.currentTarget, {
-      y: 0,
-      boxShadow: "0 1px 2px rgba(0, 0, 0, 0.05)",
-      duration: 0.3,
-    });
-  };
-
   return (
     <div
       ref={itemRef}
-      className="bg-white px-3 py-2 rounded-md shadow-sm border border-gray-100 mb-2 transition-all"
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      className="bg-white px-3 py-2 rounded-md shadow-sm border border-gray-100 mb- transition-all hover:bg-orange-50"
     >
       <div className="flex justify-between items-center">
-        <div className="flex-grow min-w-0 pr-3">
-          <h3 className="text-base font-medium mb-0.5 text-blue-600 hover:text-blue-800 transition-colors truncate">
-            <a
-              href={bookmark.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              title={bookmark.title}
-              className="flex items-center"
-            >
-              {bookmark.title}
-              <ExternalLink className="ml-1 h-3 w-3 inline-block text-gray-400" />
-            </a>
-          </h3>
-          <div className="text-xs text-gray-500 flex items-center">
-            <span className="inline-block mr-2">
-              {formatDate(bookmark.createdAt)}
-            </span>
-            <a
-              href={bookmark.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-gray-400 hover:text-gray-600 transition-colors truncate"
-              title={bookmark.url}
-            >
-              {bookmark.url.replace(/^https?:\/\//, "")}
-            </a>
+        <div className="flex items-center flex-grow min-w-0 pr-3">
+          <div
+            className={`flex-shrink-0 w-10 h-10 rounded-full bg-blue-400 ${
+              bookmark.title
+            } text-white flex items-center justify-center font-medium mr-3 text-lg shadow-sm`}
+          >
+            {getInitial(bookmark.title)}
+          </div>
+          <div className="flex-grow min-w-0">
+            <h3 className="text-base font-medium mb-0.5 text-blue-600 hover:text-blue-800 transition-colors truncate">
+              <a
+                href={bookmark.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                title={bookmark.title}
+                className="flex items-center"
+              >
+                {bookmark.title}
+                <ExternalLink className="ml-1 h-3 w-3 inline-block text-gray-400" />
+              </a>
+            </h3>
+            <div className="text-xs text-gray-500 flex items-center">
+              <span className="inline-block mr-2">
+                {formatDate(bookmark.createdAt)}
+              </span>
+              <a
+                href={bookmark.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-gray-600 transition-colors truncate"
+                title={bookmark.url}
+              >
+                {bookmark.url.replace(/^https?:\/\//, "")}
+              </a>
+            </div>
           </div>
         </div>
 

@@ -133,23 +133,7 @@ export const BookmarksList = ({
 
   return (
     <div>
-      {displayedBookmarks.length > 0 && (
-        <div
-          ref={headerRef}
-          className="flex justify-between items-center mb-4 text-sm"
-        >
-          <div className="text-gray-500">
-            Showing {displayedBookmarks.length} of {bookmarks.length} bookmarks
-          </div>
-          {totalPages > 1 && (
-            <div className="text-gray-500">
-              Page {currentPage} of {totalPages}
-            </div>
-          )}
-        </div>
-      )}
-
-      <div ref={listRef} className="bg-gray-50 rounded-lg p-4 shadow-inner">
+      <div ref={listRef} className="bg-gray-50 rounded-lg p-3 shadow-inner">
         <div ref={itemsRef} className="space-y-2">
           {displayedBookmarks.length > 0 ? (
             displayedBookmarks.map((bookmark) => (
@@ -172,6 +156,22 @@ export const BookmarksList = ({
           )}
         </div>
       </div>
+
+      {displayedBookmarks.length > 0 && (
+        <div
+          ref={headerRef}
+          className="flex justify-between items-center mb-4 text-sm mt-4 px-5"
+        >
+          <div className="text-gray-500">
+            Showing {displayedBookmarks.length} of {bookmarks.length} bookmarks
+          </div>
+          {totalPages > 1 && (
+            <div className="text-gray-500">
+              Page {currentPage} of {totalPages}
+            </div>
+          )}
+        </div>
+      )}
 
       {bookmarks.length > ITEMS_PER_PAGE && (
         <Pagination

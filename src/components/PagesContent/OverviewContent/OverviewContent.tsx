@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { BookmarkForm } from "@/components/ui/BookmarkForm";
 import { BookmarksList } from "@/components/ui/BookmarksList";
@@ -6,7 +6,14 @@ import { Bookmark } from "@/types";
 import { useEffect, useState, useRef } from "react";
 import { gsap } from "gsap";
 import { pageTransition, showSuccessMessage } from "@/utils/animations";
-import { getBookmarks, addBookmark, updateBookmark, deleteBookmark } from "@/app/actions";
+import {
+  getBookmarks,
+  addBookmark,
+  updateBookmark,
+  deleteBookmark,
+} from "@/app/actions";
+import Link from "next/link";
+import { PlusCircle } from "lucide-react";
 
 export const OverviewContent = () => {
   const pageRef = useRef<HTMLDivElement>(null);
@@ -102,10 +109,10 @@ export const OverviewContent = () => {
   // Cancel editing
   const handleCancelEdit = () => {
     setEditingBookmark(null);
-  };  
+  };
 
   return (
-    <div ref={pageRef} className="container mx-auto px-4 py-8 max-w-4xl">
+    <div ref={pageRef} className="container mx-auto px-4 py-8 max-w-[670px]">
       <h1 className="page-title text-3xl font-bold mb-10 text-center text-gray-800">
         <span className="text-blue-600">Bookmark</span> Manager
       </h1>
@@ -129,12 +136,23 @@ export const OverviewContent = () => {
         <BookmarkForm onSubmit={handleAddBookmark} />
       )}
 
+      <div className="flex justify-center mb-8 w-full">
+        <Link
+          href="/submit"
+          className="flex items-center px-5 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition w-full"
+        >
+          <PlusCircle className="w-5 h-5 mr-2" />
+          Check URL
+        </Link>
+      </div>
+
+
       {/* Bookmarks list with pagination */}
       <BookmarksList
         bookmarks={bookmarks}
         onEdit={handleEditBookmark}
         onDelete={handleDeleteBookmark}
       />
-    </div>  
+    </div>
   );
 };

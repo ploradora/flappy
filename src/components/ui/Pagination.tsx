@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PaginationProps {
   currentPage: number;
@@ -29,9 +30,8 @@ export const Pagination = ({
   // Animate page button hover
   const handleButtonHover = (e: React.MouseEvent<HTMLButtonElement>) => {
     gsap.to(e.currentTarget, {
-      scale: 1.1,
-      backgroundColor: "#3b82f6",
-      color: "white",
+      backgroundColor: "#f3f4f6", // Very light gray
+      color: "#4b5563", // Medium gray
       duration: 0.2,
     });
   };
@@ -41,9 +41,8 @@ export const Pagination = ({
     isActive: boolean
   ) => {
     gsap.to(e.currentTarget, {
-      scale: 1,
-      backgroundColor: isActive ? "#3b82f6" : "#f9fafb",
-      color: isActive ? "white" : "#374151",
+      backgroundColor: isActive ? "#e5e7eb" : "#f9fafb", // Light gray for active, very light gray for inactive
+      color: isActive ? "#4b5563" : "#6b7280", // Medium gray for active, gray for inactive
       duration: 0.2,
     });
   };
@@ -98,42 +97,34 @@ export const Pagination = ({
       <button
         onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
-        className={`flex items-center justify-center h-10 w-10 rounded-md focus:outline-none ${
+        className={`flex items-center justify-center h-8 w-8 rounded-md focus:outline-none cursor-pointer ${
           currentPage === 1
-            ? "text-gray-400 cursor-not-allowed"
-            : "text-gray-700 hover:bg-blue-500 hover:text-white"
+            ? "text-gray-300 cursor-not-allowed"
+            : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         }`}
         onMouseEnter={currentPage !== 1 ? handleButtonHover : undefined}
         onMouseLeave={(e) => currentPage !== 1 && handleButtonLeave(e, false)}
         aria-label="Previous page"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-            clipRule="evenodd"
-          />
-        </svg>
+        <ChevronLeft className="h-4 w-4" />
       </button>
 
       {getPageNumbers().map((page, index) =>
         page === "..." ? (
-          <span key={`ellipsis-${index}`} className="px-3 py-2 mx-1">
+          <span
+            key={`ellipsis-${index}`}
+            className="px-2 py-1 mx-1 text-sm text-gray-500"
+          >
             ...
           </span>
         ) : (
           <button
             key={`page-${page}`}
             onClick={() => typeof page === "number" && onPageChange(page)}
-            className={`h-10 w-10 rounded-md focus:outline-none transition-colors ${
+            className={`h-8 w-8 rounded-md focus:outline-none transition-colors text-sm cursor-pointer ${
               page === currentPage
-                ? "bg-blue-500 text-white"
-                : "bg-gray-50 text-gray-700 hover:bg-blue-500 hover:text-white"
+                ? "bg-gray-100 text-gray-700 border border-gray-200"
+                : "bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-700"
             }`}
             onMouseEnter={handleButtonHover}
             onMouseLeave={(e) => handleButtonLeave(e, page === currentPage)}
@@ -150,10 +141,10 @@ export const Pagination = ({
           currentPage < totalPages && onPageChange(currentPage + 1)
         }
         disabled={currentPage === totalPages}
-        className={`flex items-center justify-center h-10 w-10 rounded-md focus:outline-none ${
+        className={`flex items-center justify-center h-8 w-8 rounded-md focus:outline-none cursor-pointer ${
           currentPage === totalPages
-            ? "text-gray-400 cursor-not-allowed"
-            : "text-gray-700 hover:bg-blue-500 hover:text-white"
+            ? "text-gray-300 cursor-not-allowed"
+            : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         }`}
         onMouseEnter={
           currentPage !== totalPages ? handleButtonHover : undefined
@@ -163,18 +154,7 @@ export const Pagination = ({
         }
         aria-label="Next page"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-5 w-5"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-        >
-          <path
-            fillRule="evenodd"
-            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-            clipRule="evenodd"
-          />
-        </svg>
+        <ChevronRight className="h-4 w-4" />
       </button>
     </div>
   );

@@ -27,18 +27,6 @@ export default function RootLayout({
                 Bookmark Manager
               </Link>
             </h1>
-            <nav>
-              <ul className="flex space-x-6">
-                <li>
-                  <Link
-                    href="/overview"
-                    className="text-gray-600 hover:text-blue-600 transition-colors"
-                  >
-                    Overview
-                  </Link>
-                </li>
-              </ul>
-            </nav>
           </div>
         </header>
 
