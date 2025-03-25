@@ -1,4 +1,4 @@
-import { SubmitContent } from "@/components/pagesContent/SubmitContent/SubmitContent";
+import { SubmitContent } from "@/components/PagesContent/SubmitContent/SubmitContent";
 
 export default function Submit() {
   return <SubmitContent />;

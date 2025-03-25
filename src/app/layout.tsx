@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-gray-50`}>
+      <body className={`${inter.className} bg-gray-50 min-h-screen flex flex-col`}>
         <header className="bg-white shadow-sm">
           <div className="container mx-auto px-4 py-4 flex justify-between items-center">
             <h1 className="text-xl font-bold text-blue-600">
@@ -39,11 +39,11 @@ export default function RootLayout({
           </div>
         </header>
 
-        <main>{children}</main>
+        <main className="flex-grow">{children}</main>
 
-        <footer className="bg-white border-t border-gray-200 py-4 mt-12">
+        <footer className="bg-white border-t border-gray-200 py-4">
           <div className="container mx-auto px-4 text-center text-gray-500 text-sm">
-            © {new Date().getFullYear()} Bookmark Manager - Powered by Next.js
+            © {new Date().getFullYear()} Bookmark Manager - Powered by Phantom
           </div>
         </footer>
       </body>
