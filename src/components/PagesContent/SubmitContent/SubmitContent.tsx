@@ -4,13 +4,13 @@ import { FormEvent, useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { getBookmarks } from "@/app/actions";
-import { Ban, CheckCircle } from "lucide-react";
+import { Ban } from "lucide-react";
+import { BookmarksSubmitList } from "./BookmarksSubmitList";
 
 export const SubmitContent = () => {
   const [url, setUrl] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [showCongrats, setShowCongrats] = useState(false);
 
   const router = useRouter();
@@ -33,9 +33,9 @@ export const SubmitContent = () => {
 
   // Animate congratulations message when it appears
   useEffect(() => {
-    if (showCongrats && congratsRef.current) {
+    if (showCongrats && successRef.current) {
       gsap.fromTo(
-        congratsRef.current,
+        successRef.current,
         { opacity: 0, y: 20 },
         {
           opacity: 1,
@@ -44,7 +44,7 @@ export const SubmitContent = () => {
           ease: "back.out(1.7)",
           onComplete: () => {
             // Auto-hide the success message after 5 seconds
-            gsap.to(congratsRef.current, {
+            gsap.to(successRef.current, {
               opacity: 0,
               y: 10,
               delay: 5,
@@ -60,7 +60,6 @@ export const SubmitContent = () => {
   const handleClearInput = () => {
       setUrl("");
       setError("");
-      setSuccess("");
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -72,7 +71,7 @@ export const SubmitContent = () => {
     );
 
     if(checkUrl) {
-      setSuccess("It's here!");
+      setShowCongrats(true)
       return;
     }
 
@@ -80,13 +79,11 @@ export const SubmitContent = () => {
   };
 
   return (
-    <div className="flex w-full h-full bg-red-200">
+    <div className="flex w-full h-full">
 
-      <div className="flex-1 h-full">
-        the list
-      </div>
+      <BookmarksSubmitList />
 
-      <div className="flex-1 h-full grid place-items-center bg-white">
+      <div className="flex-1 h-[calc(100vh_-_100px)] grid place-items-center bg-white">
         <div>
           <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
             Check Your URL
@@ -164,25 +161,14 @@ export const SubmitContent = () => {
                 </button>
               </div>
           </form>
-
-          {/* Congratulations message */}
-          {/* {showCongrats && (
-            <div
-              ref={congratsRef}
-              className="mt-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg shadow-md flex items-center gap-3"
-            >
-              <CheckCircle size={20} className="text-green-500" />
-              <div>
-                <p className="font-medium mb-1">Congratulations!</p>
-                {!urlAlreadyExists(url) && (
-                  <p className="text-xs mt-1 text-green-600">
-                    Redirecting to results page in a few seconds...
-                  </p>
-                )}
-              </div>
-            </div>
-          )} */}
         </div>
+      </div>
+
+      <div 
+        ref={congratsRef} 
+        className=""
+      >
+
       </div>
     </div>
   );
