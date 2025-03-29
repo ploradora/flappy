@@ -5,6 +5,7 @@ import { Bookmark } from "../../types";
 import { BookmarkItem } from "./BookmarkItem";
 import { Pagination } from "./Pagination";
 import { gsap } from "gsap";
+import { BookmarkListCutout } from "./BookmarkListCutout";
 
 interface BookmarksListProps {
   bookmarks: Bookmark[];
@@ -49,10 +50,10 @@ export const BookmarksList = ({
 
       gsap.fromTo(
         items,
-        { opacity: 0, y: 10 },
+        { opacity: 0, x: 10 },
         {
           opacity: 1,
-          y: 0,
+          x: 0,
           duration: 0.4,
           stagger: 0.05,
           ease: "power3.out",
@@ -132,9 +133,9 @@ export const BookmarksList = ({
   }
 
   return (
-    <div>
-      <div ref={listRef} className="bg-gray-50 rounded-lg p-3 shadow-inner">
-        <div ref={itemsRef} className="space-y-2">
+    <div className="h-[calc(100%_-_250px)] max-w-[1000px] m-auto">
+      <div ref={listRef} className="relative bg-gray-50 mt-4 h-full">
+        <div ref={itemsRef} className="flex h-full gap-2">
           {displayedBookmarks.length > 0 ? (
             displayedBookmarks.map((bookmark) => (
               <BookmarkItem
@@ -155,31 +156,13 @@ export const BookmarksList = ({
             </div>
           )}
         </div>
+        <BookmarkListCutout />
       </div>
-
-      {displayedBookmarks.length > 0 && (
-        <div
-          ref={headerRef}
-          className="flex justify-between items-center mb-4 text-sm mt-4 px-5"
-        >
-          <div className="text-gray-500">
-            Showing {displayedBookmarks.length} of {bookmarks.length} bookmarks
-          </div>
-          {totalPages > 1 && (
-            <div className="text-gray-500">
-              Page {currentPage} of {totalPages}
-            </div>
-          )}
-        </div>
-      )}
-
-      {bookmarks.length > ITEMS_PER_PAGE && (
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={handlePageChange}
-        />
-      )}
+      {/* <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      /> */}
     </div>
   );
 };

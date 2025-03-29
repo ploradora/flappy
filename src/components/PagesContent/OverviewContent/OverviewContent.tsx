@@ -39,9 +39,8 @@ export const OverviewContent = () => {
   // Handle adding a new bookmark
   const handleAddBookmark = ({
     url,
-    title,
   }: Omit<Bookmark, "id" | "createdAt" | "description">) => {
-    const newBookmark = addBookmark({ url, title });
+    const newBookmark = addBookmark({ url });
 
     // Update local state
     setBookmarks((prevBookmarks) => [newBookmark, ...prevBookmarks]);
@@ -66,11 +65,10 @@ export const OverviewContent = () => {
   // Handle updating a bookmark
   const handleUpdateBookmark = ({
     url,
-    title,
   }: Omit<Bookmark, "id" | "createdAt" | "description">) => {
     if (!editingBookmark) return;
 
-    const updatedBookmark = updateBookmark(editingBookmark.id, { url, title });
+    const updatedBookmark = updateBookmark(editingBookmark.id, { url });
     if (updatedBookmark) {
       // Update local state
       setBookmarks((prevBookmarks) =>
@@ -113,7 +111,7 @@ export const OverviewContent = () => {
   return (
     <div
       ref={pageRef}
-      className="container relative mx-auto px-4 py-8 max-w-[670px]"
+      className=" relative mx-auto px-4 py-4 h-full"
     >
       {/* Success indicator (initially hidden) */}
       <div
@@ -135,7 +133,7 @@ export const OverviewContent = () => {
         <BookmarkForm onSubmit={handleAddBookmark} />
       )}
 
-      <div className="flex justify-center mb-8 w-full gap-4 px-6 py-6">
+      {/* <div className="flex justify-center mb-8 w-full gap-4 px-6 py-6">
         <Link
           href="/submit"
           className="flex items-center justify-center px-5 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition w-full"
@@ -201,7 +199,7 @@ export const OverviewContent = () => {
           </svg>
           View Results
         </Link>
-      </div>
+      </div> */}
 
       {/* Bookmarks list with pagination */}
       <BookmarksList

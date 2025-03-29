@@ -1,8 +1,10 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, RefObject, useEffect, useRef, useState } from "react";
 import { Bookmark } from "../../types";
 import { gsap } from "gsap";
+import { ArrowBigDown, Ban, ChevronDown, Loader, Send } from "lucide-react";
+import { arrowShowForm } from "@/utils/animations";
 
 interface BookmarkFormProps {
   editBookmark?: Bookmark;
@@ -10,16 +12,13 @@ interface BookmarkFormProps {
   onCancel?: () => void;
 }
 
-export const BookmarkForm = ({
-  editBookmark,
-  onSubmit,
-  onCancel,
-}: BookmarkFormProps) => {
+export const BookmarkForm = ({ editBookmark, onSubmit }: BookmarkFormProps) => {
   const [url, setUrl] = useState(editBookmark?.url || "");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const formRef = useRef<HTMLFormElement>(null);
+  const arrowDownRef = useRef<SVGSVGElement | null>(null);
   const urlInputRef = useRef<HTMLInputElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
   const successIconRef = useRef<HTMLDivElement>(null);
@@ -68,6 +67,13 @@ export const BookmarkForm = ({
       }
     }
   }, [editBookmark]);
+
+  // Animate arrow form
+  useEffect(() => {
+    if (arrowDownRef.current) {
+      arrowShowForm(arrowDownRef.current);
+    }
+  }, []);
 
   // Animate error message
   useEffect(() => {
@@ -163,145 +169,81 @@ export const BookmarkForm = ({
   };
 
   return (
-    <>
-    <form
-      ref={formRef}
-      onSubmit={handleSubmit}
-      className="bg-white p-4 rounded-lg shadow-md mb-2 border border-gray-100 transition-all hover:shadow-lg relative overflow-hidden"
-    >
-      <div
-        ref={successIconRef}
-        className="absolute top-4 right-4 opacity-0 pointer-events-none"
-      >
-        <div className="bg-green-100 text-green-500 p-2 rounded-full">
-          <svg
-            className="w-5 h-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            xmlns="http://www.w3.org/2000/svg"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-        </div>
-      </div>
-
-      <h2 className="text-xl font-bold text-gray-600 mb-4 text-center">
-        <p>Add Bookmark</p>
-      </h2>
-
-      
-      <div className="space-y-5">
-        <div className="input-group flex items-center gap-2">
-            <input
-              ref={urlInputRef}
-              type="text"
-              id="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              placeholder="https://example.com"
-              className="w-full pl-6 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-gray-800 bg-gray-50 hover:bg-white focus:bg-white"
-              required
-            />
-            <div className="flex justify-between">
-              {editBookmark && onCancel && (
-              <button
-                type="button"
-                onClick={onCancel}
-                className="px-4 py-2 flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 flex items-center justify-center"
-              >
-                <svg
-                  className="w-4 h-4"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-                Cancel
-              </button>
-          )}
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className={`p-3 flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-center`}
-          >
-            {isSubmitting ? (
-              <svg
-                className="w-5 h-5 animate-spin"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="12" y1="2" x2="12" y2="6" />
-                <line x1="12" y1="18" x2="12" y2="22" />
-                <line x1="4.93" y1="4.93" x2="7.76" y2="7.76" />
-                <line x1="16.24" y1="16.24" x2="19.07" y2="19.07" />
-                <line x1="2" y1="12" x2="6" y2="12" />
-                <line x1="18" y1="12" x2="22" y2="12" />
-                <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
-                <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
-              </svg>
-            ) :  (
-              <svg
-                className="w-5 h-5 "
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <polyline points="12 6 12 12 16 14" />
-              </svg>
-            )}
-          </button>
-        </div>
-      </div>
-      </div>
-    </form>
-
-    {error && (
-        <div
-          ref={errorRef}
-          className="bg-yellow-50 border-1 text-sm border-yellow-400 text-yellow-700 pl-4 py-2 rounded-md mb-2 flex items-center"
+    <div className="max-w-[500px] m-auto flex flex-col justify-center">
+      <div className="">
+        <form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          className="bg-white p-2 rounded-lg shadow-md mb-2 border border-gray-100 transition-all hover:shadow-lg relative overflow-hidden"
         >
-          <svg
-            className="h-5 w-5 mr-2 mt-0.5 flex-shrink-0"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            xmlns="http://www.w3.org/2000/svg"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          <div
+            ref={successIconRef}
+            className="absolute top-4 right-4 opacity-0 pointer-events-none"
           >
-            <circle cx="12" cy="12" r="10" />
-            <line x1="12" y1="8" x2="12" y2="12" />
-            <line x1="12" y1="16" x2="12.01" y2="16" />
-          </svg>
-          <span>{error}</span>
+            <div className="bg-green-100 text-green-500 p-2 rounded-full">
+              <svg
+                className="w-5 h-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
+          </div>
+
+          <div className="space-y-5">
+            <div className="input-group flex items-center gap-2">
+              <input
+                ref={urlInputRef}
+                type="text"
+                id="url"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                placeholder="https://example.com"
+                className="w-full pl-6 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-gray-800 bg-gray-50 hover:bg-white focus:bg-white"
+                required
+              />
+              <div className="flex justify-between">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className={`h-[46px] w-[46px] bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-center cursor-pointer`}
+                >
+                  {isSubmitting ? (
+                    <Loader size={18} className="animate-spin" />
+                  ) : (
+                    <Send size={19} />
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        {error && (
+          <div
+            ref={errorRef}
+            className="bg-yellow-50 border-1 text-sm border-yellow-400 text-yellow-700 pl-4 py-2 gap-2 rounded-md mb-2 flex items-center"
+          >
+            <Ban size={18} />
+            <span>{error}</span>
+          </div>
+        )}
+        <div className="relative w-20 h-8 cursor-pointer m-auto">
+          <ChevronDown
+            ref={arrowDownRef}
+            size={35}
+            strokeWidth={2.5}
+            color="orange"
+            className="arrowShowForm absolute inset-0 m-auto"
+          />
         </div>
-      )}
-
-    <div className="bg-orange-400 px-6 py-1 rounded-md w-fit">
-      arrow
+      </div>
     </div>
-    </>
-
   );
 };

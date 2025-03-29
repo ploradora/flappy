@@ -23,7 +23,7 @@ export function addBookmark({
 
   const bookmarks = bookmarkStorage.getAll();
   const updatedBookmarks = [newBookmark, ...bookmarks];
-  // bookmarkStorage.save(updatedBookmarks);
+  bookmarkStorage.save(updatedBookmarks);
 
   return newBookmark;
 }
