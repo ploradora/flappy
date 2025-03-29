@@ -30,10 +30,10 @@ export const OverviewContent = () => {
   }, []);
 
   // Handle adding a new bookmark
-  const handleAddBookmark = ({ url }: Omit<Bookmark, "id">) => {
+  const handleAddBookmark = ({ url }: Omit<Bookmark, "id" | "createdAt">) => {
     const newBookmark = addBookmark({ url });
 
-    // Update local state
+    // Update local state with the new bookmark that now has id and createdAt
     setBookmarks((prevBookmarks) => [newBookmark, ...prevBookmarks]);
 
     // Show success animation

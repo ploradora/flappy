@@ -7,10 +7,13 @@ export function getBookmarks(): Bookmark[] {
   return bookmarks;
 }
 
-export function addBookmark({ url }: Omit<Bookmark, "id">): Bookmark {
+export function addBookmark({
+  url,
+}: Omit<Bookmark, "id" | "createdAt">): Bookmark {
   const newBookmark: Bookmark = {
     id: uuidv4(),
     url,
+    createdAt: Date.now(),
   };
 
   bookmarkStorage.add(newBookmark);

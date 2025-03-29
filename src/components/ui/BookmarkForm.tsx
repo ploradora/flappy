@@ -7,7 +7,7 @@ import { ArrowBigDown, Ban, ChevronDown, Loader, Send } from "lucide-react";
 import { arrowShowForm } from "@/utils/animations";
 
 interface BookmarkFormProps {
-  onSubmit: (bookmark: Omit<Bookmark, "id">) => void;
+  onSubmit: (bookmark: Omit<Bookmark, "id" | "createdAt">) => void;
 }
 
 export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {

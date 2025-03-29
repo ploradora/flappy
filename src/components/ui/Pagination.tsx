@@ -1,6 +1,4 @@
-"use client";
-
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 
 interface PaginationProps {
@@ -15,47 +13,38 @@ export const Pagination = ({
   onPageChange,
 }: PaginationProps) => {
   const paginationRef = useRef<HTMLDivElement>(null);
+  const [selectedPage, setSelectedPage] = useState(currentPage);
 
-  // useEffect(() => {
-  //   if (paginationRef.current) {
-  //     gsap.fromTo(
-  //       paginationRef.current,
-  //       { opacity: 0, y: 20 },
-  //       { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }
-  //     );
-  //   }
-  // }, []);
+  useEffect(() => {
+    // Sync when parent updates
+    setSelectedPage(currentPage);
+  }, [currentPage]);
 
-  // Generate page numbers to display
+  const handlePageClick = (page: number) => {
+    setSelectedPage(page); // Update instantly for UI
+    onPageChange(page); // Let parent do the real page update
+  };
+
   const getPageNumbers = () => {
     const pageNumbers = [];
 
     if (totalPages <= 7) {
-      // Show all pages if there are 7 or fewer
       for (let i = 1; i <= totalPages; i++) {
         pageNumbers.push(i);
       }
     } else {
-      // Always show first and last page
-      if (currentPage <= 3) {
-        // Near the start
-        for (let i = 1; i <= 5; i++) {
-          pageNumbers.push(i);
-        }
+      if (selectedPage <= 3) {
+        for (let i = 1; i <= 5; i++) pageNumbers.push(i);
         pageNumbers.push("...");
         pageNumbers.push(totalPages);
-      } else if (currentPage >= totalPages - 2) {
-        // Near the end
+      } else if (selectedPage >= totalPages - 2) {
         pageNumbers.push(1);
         pageNumbers.push("...");
-        for (let i = totalPages - 4; i <= totalPages; i++) {
-          pageNumbers.push(i);
-        }
+        for (let i = totalPages - 4; i <= totalPages; i++) pageNumbers.push(i);
       } else {
-        // Middle
         pageNumbers.push(1);
         pageNumbers.push("...");
-        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+        for (let i = selectedPage - 1; i <= selectedPage + 1; i++) {
           pageNumbers.push(i);
         }
         pageNumbers.push("...");
@@ -66,18 +55,18 @@ export const Pagination = ({
     return pageNumbers;
   };
 
-  if (totalPages <= 1) return null;
-
   return (
     <div
       ref={paginationRef}
       className="flex flex-col justify-start items-center space-y-2 p-2"
     >
       <button
-        onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
-        disabled={currentPage === 1}
+        onClick={() =>
+          selectedPage > 1 && handlePageClick(selectedPage - 1)
+        }
+        disabled={selectedPage === 1}
         className={`flex items-center justify-center h-8 w-8 rounded-md focus:outline-none cursor-pointer ${
-          currentPage === 1
+          selectedPage === 1
             ? "text-gray-300 cursor-not-allowed"
             : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         }`}
@@ -110,14 +99,16 @@ export const Pagination = ({
         ) : (
           <button
             key={`page-${page}`}
-            onClick={() => typeof page === "number" && onPageChange(page)}
+            onClick={() =>
+              typeof page === "number" && handlePageClick(page)
+            }
             className={`h-8 w-8 rounded-md focus:outline-none transition-colors text-sm cursor-pointer flex items-center justify-center ${
-              page === currentPage
+              page === selectedPage
                 ? "bg-blue-50 text-blue-600 border border-blue-200 font-medium"
                 : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
             }`}
             aria-label={`Page ${page}`}
-            aria-current={page === currentPage ? "page" : undefined}
+            aria-current={page === selectedPage ? "page" : undefined}
           >
             {page}
           </button>
@@ -128,11 +119,11 @@ export const Pagination = ({
 
       <button
         onClick={() =>
-          currentPage < totalPages && onPageChange(currentPage + 1)
+          selectedPage < totalPages && handlePageClick(selectedPage + 1)
         }
-        disabled={currentPage === totalPages}
+        disabled={selectedPage === totalPages}
         className={`flex items-center justify-center h-8 w-8 rounded-md focus:outline-none cursor-pointer ${
-          currentPage === totalPages
+          selectedPage === totalPages
             ? "text-gray-300 cursor-not-allowed"
             : "text-gray-500 hover:bg-gray-100 hover:text-gray-700"
         }`}
