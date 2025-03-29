@@ -7,13 +7,11 @@ import { ArrowBigDown, Ban, ChevronDown, Loader, Send } from "lucide-react";
 import { arrowShowForm } from "@/utils/animations";
 
 interface BookmarkFormProps {
-  editBookmark?: Bookmark;
-  onSubmit: (bookmark: Omit<Bookmark, "id" | "createdAt">) => void;
-  onCancel?: () => void;
+  onSubmit: (bookmark: Omit<Bookmark, "id">) => void;
 }
 
-export const BookmarkForm = ({ editBookmark, onSubmit }: BookmarkFormProps) => {
-  const [url, setUrl] = useState(editBookmark?.url || "");
+export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
+  const [url, setUrl] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -22,51 +20,6 @@ export const BookmarkForm = ({ editBookmark, onSubmit }: BookmarkFormProps) => {
   const urlInputRef = useRef<HTMLInputElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
   const successIconRef = useRef<HTMLDivElement>(null);
-
-  // Animate form on mount
-  // useEffect(() => {
-  //   if (formRef.current) {
-  //     const tl = gsap.timeline();
-
-  //     tl.fromTo(
-  //       formRef.current,
-  //       { y: -20, opacity: 0 },
-  //       { y: 0, opacity: 1, duration: 0.5, ease: "power3.out" }
-  //     );
-
-  //     // Animate form elements
-  //     const formElements = formRef.current.querySelectorAll(
-  //       "input, button, label, .input-group"
-  //     );
-  //     tl.fromTo(
-  //       formElements,
-  //       { y: 10, opacity: 0 },
-  //       { y: 0, opacity: 1, duration: 0.4, stagger: 0.05, ease: "power2.out" },
-  //       "-=0.3"
-  //     );
-  //   }
-  // }, []);
-
-  // Handle edit bookmark changes
-  useEffect(() => {
-    if (editBookmark) {
-      setUrl(editBookmark.url);
-
-      // Highlight form when editing
-      if (formRef.current) {
-        gsap.fromTo(
-          formRef.current,
-          { boxShadow: "0 0 0 3px rgba(59, 130, 246, 0)" },
-          {
-            boxShadow: "0 0 0 3px rgba(59, 130, 246, 0.3)",
-            duration: 0.5,
-            repeat: 1,
-            yoyo: true,
-          }
-        );
-      }
-    }
-  }, [editBookmark]);
 
   // Animate arrow form
   useEffect(() => {
@@ -159,13 +112,11 @@ export const BookmarkForm = ({ editBookmark, onSubmit }: BookmarkFormProps) => {
     onSubmit({ url });
     setIsSubmitting(false);
 
-    // Only clear the form if not editing
-    if (!editBookmark) {
-      setUrl("");
+    // Clear the form after submitting
+    setUrl("");
 
-      // Focus back on URL input after adding
-      urlInputRef.current?.focus();
-    }
+    // Focus back on URL input after adding
+    urlInputRef.current?.focus();
   };
 
   return (

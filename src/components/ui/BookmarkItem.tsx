@@ -6,8 +6,6 @@ import Link from "next/link";
 
 interface BookmarkItemProps {
   bookmark: Bookmark;
-  onEdit: (bookmark: Bookmark) => void;
-  onDelete: (id: string) => void;
 }
 
 export const BookmarkItem = ({ bookmark }: BookmarkItemProps) => {

@@ -3,13 +3,10 @@
 import { useEffect, useState, useRef } from "react";
 import { Bookmark } from "../../types";
 import { BookmarkItem } from "./BookmarkItem";
-import { Pagination } from "./Pagination";
 import { gsap } from "gsap";
 
 interface BookmarksListProps {
   bookmarks: Bookmark[];
-  onEdit: (bookmark: Bookmark) => void;
-  onDelete: (id: string) => void;
 }
 
 const getColumnCount = () => {
@@ -21,11 +18,7 @@ const getColumnCount = () => {
 
 const ITEMS_PER_PAGE = 10;
 
-export const BookmarksList = ({
-  bookmarks,
-  onEdit,
-  onDelete,
-}: BookmarksListProps) => {
+export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [displayedBookmarks, setDisplayedBookmarks] = useState<Bookmark[]>([]);
   const listRef = useRef<HTMLDivElement>(null);
@@ -156,12 +149,7 @@ export const BookmarksList = ({
           {Array.from({ length: columnCount }).map((_, i) => {
             const bookmark = displayedBookmarks[i];
             return bookmark ? (
-              <BookmarkItem
-                key={bookmark.id}
-                bookmark={bookmark}
-                onEdit={onEdit}
-                onDelete={onDelete}
-              />
+              <BookmarkItem key={bookmark.id} bookmark={bookmark} />
             ) : (
               <div
                 key={`empty-${i}`}
@@ -171,11 +159,6 @@ export const BookmarksList = ({
           })}
         </div>
       </div>
-      {/* <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      /> */}
     </div>
   );
 };
