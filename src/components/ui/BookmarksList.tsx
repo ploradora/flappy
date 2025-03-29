@@ -38,7 +38,7 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
   useEffect(() => {
     const updateColumns = () => setColumnCount(getColumnCount());
 
-    updateColumns(); // initial
+    updateColumns();
     window.addEventListener("resize", updateColumns);
     return () => window.removeEventListener("resize", updateColumns);
   }, []);
@@ -59,16 +59,19 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
   // Animate items when they change
   useEffect(() => {
     if (itemsRef.current) {
-      const animatedSpans = itemsRef.current.querySelectorAll(".bookmark-anim");
+      const animatedItems = itemsRef.current.querySelectorAll(".bookmark-anim");
 
       gsap.fromTo(
-        animatedSpans,
+        animatedItems,
         { opacity: 0, y: -20 },
         {
           opacity: 1,
           y: 0,
           duration: 0.4,
-          stagger: 0.05,
+          stagger: {
+            each: 0.05,
+            from: "start",
+          },
           ease: "power3.out",
           clearProps: "all",
         }
@@ -90,27 +93,45 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
 
     const direction = page > currentPage ? 1 : -1;
 
-    if (listRef.current) {
-      // Create timeline for page transition
-      gsap
-        .timeline()
-        .to(listRef.current, {
-          opacity: 0,
-          x: -15 * direction,
-          duration: 0.25,
-          ease: "power2.in",
-          onComplete: () => {
-            setCurrentPage(page);
-            gsap.set(listRef.current, { x: 15 * direction });
-          },
-        })
-        .to(listRef.current, {
-          opacity: 1,
-          x: 0,
-          duration: 0.25,
-          ease: "power2.out",
-          delay: 0.05,
-        });
+    if (itemsRef.current) {
+      const oldItems = itemsRef.current.querySelectorAll(".bookmark-anim");
+
+      gsap.to(oldItems, {
+        opacity: 0,
+        y: -20 * direction, // animate out upward
+        duration: 0.25,
+        ease: "power2.in",
+        stagger: {
+          each: 0.03,
+          from: "start", // top-to-bottom
+        },
+        onComplete: () => {
+          setCurrentPage(page);
+
+          // wait for React to render new items
+          requestAnimationFrame(() => {
+            const newItems =
+              itemsRef.current?.querySelectorAll(".bookmark-anim");
+            if (newItems) {
+              gsap.fromTo(
+                newItems,
+                { opacity: 0, y: 20 * direction }, // animate in downward
+                {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.35,
+                  ease: "power2.out",
+                  stagger: {
+                    each: 0.04,
+                    from: "start", // top-to-bottom again
+                  },
+                  clearProps: "all",
+                }
+              );
+            }
+          });
+        },
+      });
     } else {
       setCurrentPage(page);
     }
@@ -145,25 +166,39 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
       )}
       {hasMounted && (
         <div ref={listRef} className="relative bg-gray-50 mt-4 h-full">
-          <div
-            ref={itemsRef}
-            className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-14 w-full h-full gap-1"
-          >
-            {Array.from({ length: columnCount }).map((_, i) => {
-              const bookmark = displayedBookmarks[i];
-              return bookmark ? (
-                <BookmarkItem
-                  key={bookmark.id}
-                  bookmark={bookmark}
-                  className="bookmark-anim"
-                />
-              ) : (
+          <div className="relative w-full h-full">
+            {/* BACKGROUND GRID (always visible, dashed) */}
+            <div
+              className="absolute inset-0 z-0 grid w-full h-full gap-1 pointer-events-none 
+               grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-14"
+            >
+              {Array.from({ length: columnCount }).map((_, i) => (
                 <div
-                  key={`empty-${i}`}
+                  key={`grid-bg-${i}`}
                   className="border-2 border-dashed border-gray-200 rounded-md"
                 />
-              );
-            })}
+              ))}
+            </div>
+
+            {/* FOREGROUND GRID (bookmark items only) */}
+            <div
+              ref={itemsRef}
+              className="relative z-10 grid w-full h-full gap-1
+               grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-14"
+            >
+              {Array.from({ length: columnCount }).map((_, i) => {
+                const bookmark = displayedBookmarks[i];
+                return bookmark ? (
+                  <BookmarkItem
+                    key={bookmark.id}
+                    bookmark={bookmark}
+                    className="bookmark-anim"
+                  />
+                ) : (
+                  <div key={`empty-${i}`} /> // No styling needed here
+                );
+              })}
+            </div>
           </div>
         </div>
       )}

@@ -71,7 +71,7 @@ export const Pagination = ({
   return (
     <div
       ref={paginationRef}
-      className="flex flex-col justify-start items-center space-y-2 bg-white p-2 rounded-lg shadow-sm border border-gray-100"
+      className="flex flex-col justify-start items-center space-y-2 p-2"
     >
       <button
         onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
