@@ -6,15 +6,7 @@ export const bookmarkStorage = {
   getAll: (): Bookmark[] => {
     try {
       const bookmarks = localStorage.getItem(STORAGE_KEY);
-      const parsedBookmarks = bookmarks ? JSON.parse(bookmarks) : [];
-
-      // Sort by createdAt in descending order (newest first)
-      // Handle bookmarks that might not have createdAt yet
-      return parsedBookmarks.sort((a: Bookmark, b: Bookmark) => {
-        const timeA = a.createdAt || 0;
-        const timeB = b.createdAt || 0;
-        return timeB - timeA;
-      });
+      return bookmarks ? JSON.parse(bookmarks) : [];
     } catch (error) {
       console.error("Error retrieving bookmarks from localStorage:", error);
       return [];
@@ -33,7 +25,7 @@ export const bookmarkStorage = {
     try {
       const bookmarks = localStorage.getItem(STORAGE_KEY);
       const parsedBookmarks = bookmarks ? JSON.parse(bookmarks) : [];
-      parsedBookmarks.unshift(bookmark);
+      parsedBookmarks.push(bookmark);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedBookmarks));
     } catch (error) {
       console.error("Error adding bookmark to localStorage:", error);

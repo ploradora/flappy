@@ -3,7 +3,7 @@
 import { BookmarkForm } from "@/components/ui/BookmarkForm";
 import { BookmarksList } from "@/components/ui/BookmarksList";
 import { Bookmark } from "@/types";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import { gsap } from "gsap";
 import { pageTransition, showSuccessMessage } from "@/utils/animations";
 import { getBookmarks, addBookmark } from "@/app/actions";
@@ -29,11 +29,20 @@ export const OverviewContent = () => {
     }
   }, []);
 
+  // Sort bookmarks by createdAt timestamp (newest first)
+  const sortedBookmarks = useMemo(() => {
+    return [...bookmarks].sort((a, b) => {
+      const timeA = a.createdAt || 0;
+      const timeB = b.createdAt || 0;
+      return timeB - timeA;
+    });
+  }, [bookmarks]);
+
   // Handle adding a new bookmark
   const handleAddBookmark = ({ url }: Omit<Bookmark, "id" | "createdAt">) => {
     const newBookmark = addBookmark({ url });
 
-    // Update local state with the new bookmark that now has id and createdAt
+    // Update local state with the new bookmark
     setBookmarks((prevBookmarks) => [newBookmark, ...prevBookmarks]);
 
     // Show success animation
@@ -57,7 +66,7 @@ export const OverviewContent = () => {
       <BookmarkForm onSubmit={handleAddBookmark} />
 
       {/* Bookmarks list */}
-      <BookmarksList bookmarks={bookmarks} />
+      <BookmarksList bookmarks={sortedBookmarks} />
     </div>
   );
 };

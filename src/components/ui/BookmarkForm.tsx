@@ -5,9 +5,10 @@ import { Bookmark } from "../../types";
 import { gsap } from "gsap";
 import { ArrowBigDown, Ban, ChevronDown, Loader, Send } from "lucide-react";
 import { arrowShowForm } from "@/utils/animations";
+import { addBookmark } from "@/app/actions";
 
 interface BookmarkFormProps {
-  onSubmit: (bookmark: Omit<Bookmark, "id" | "createdAt">) => void;
+  onSubmit: (bookmark: Bookmark) => void;
 }
 
 export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
@@ -61,7 +62,6 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Validate URL
     if (!validateUrl(url)) {
       setError("Please enter a valid URL including http:// or https://");
       return;
@@ -84,7 +84,6 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
       });
     }
 
-    // Show success animation if there's no error
     if (successIconRef.current) {
       gsap.fromTo(
         successIconRef.current,
@@ -95,7 +94,6 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
           duration: 0.5,
           ease: "back.out(1.7)",
           onComplete: () => {
-            // Hide after animation completes
             gsap.to(successIconRef.current, {
               opacity: 0,
               delay: 1,
@@ -106,16 +104,12 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
       );
     }
 
-    // Simulate a small delay for better UX
     await new Promise((resolve) => setTimeout(resolve, 300));
 
-    onSubmit({ url });
+    const newBookmark = addBookmark({ url });
+    onSubmit(newBookmark);
     setIsSubmitting(false);
-
-    // Clear the form after submitting
     setUrl("");
-
-    // Focus back on URL input after adding
     urlInputRef.current?.focus();
   };
 

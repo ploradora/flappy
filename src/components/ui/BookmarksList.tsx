@@ -17,8 +17,6 @@ const getColumnCount = () => {
   return 4; // default base
 };
 
-const ITEMS_PER_PAGE = 14;
-
 export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [displayedBookmarks, setDisplayedBookmarks] = useState<Bookmark[]>([]);
@@ -26,8 +24,9 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
   const itemsRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const [columnCount, setColumnCount] = useState(4);
+  const [itemsPerPage, setItemsPerPage] = useState(columnCount);
 
-  const totalPages = Math.max(1, Math.ceil(bookmarks.length / ITEMS_PER_PAGE));
+  const totalPages = Math.max(1, Math.ceil(bookmarks.length / itemsPerPage));
 
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -36,7 +35,11 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
   }, []);
 
   useEffect(() => {
-    const updateColumns = () => setColumnCount(getColumnCount());
+    const updateColumns = () => {
+      const newColumnCount = getColumnCount();
+      setColumnCount(newColumnCount);
+      setItemsPerPage(newColumnCount);
+    };
 
     updateColumns();
     window.addEventListener("resize", updateColumns);
@@ -51,10 +54,10 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
 
   // Update displayed bookmarks when page or bookmarks change
   useEffect(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
     setDisplayedBookmarks(bookmarks.slice(startIndex, endIndex));
-  }, [bookmarks, currentPage]);
+  }, [bookmarks, currentPage, itemsPerPage]);
 
   // Animate items when they change
   useEffect(() => {
@@ -164,7 +167,7 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
           />
         </div>
       )}
-  
+
       {hasMounted && (
         <div ref={listRef} className="relative bg-gray-50 mt-4 h-full w-full">
           <div className="relative w-full h-full">
@@ -180,7 +183,7 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
                 />
               ))}
             </div>
-  
+
             {/* FOREGROUND GRID */}
             <div
               ref={itemsRef}
@@ -200,7 +203,7 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
                 );
               })}
             </div>
-  
+
             {/* EMPTY STATE MESSAGE */}
             {bookmarks.length === 0 && (
               <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
@@ -219,5 +222,4 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
       )}
     </div>
   );
-  
 };
