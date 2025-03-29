@@ -5,6 +5,7 @@ import { Bookmark } from "../../types";
 import { BookmarkItem } from "./BookmarkItem";
 import { gsap } from "gsap";
 import { Pagination } from "./Pagination";
+import { NavButtons } from "./NavButtons";
 
 interface BookmarksListProps {
   bookmarks: Bookmark[];
@@ -140,86 +141,73 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
     }
   };
 
-  // Empty state
-  // if (bookmarks.length === 0) {
-  //   displayedBookmarks.length === 0 && (
-  //     <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-  //       <div className="bg-white rounded-md shadow-sm border border-gray-100 p-4 text-center">
-  //         <h3 className="text-base font-medium text-gray-500">
-  //           You don't have any links added yet
-  //         </h3>
-  //         <p className="text-sm text-gray-400 mt-1">
-  //           Try adding some links to get started.
-  //         </p>
-  //       </div>
-  //     </div>
-  //   );
-  // }
-
   return (
-    <div className="relative flex h-[calc(100%_-_250px)] max-w-[1000px] m-auto">
-      {hasMounted && totalPages > 1 && (
-        <div className="absolute py-4 self-start top-1/2 transform -translate-y-1/2 -left-14 h-fit">
-          <Pagination
-            currentPage={currentPage}
-            onPageChange={handlePageChange}
-            totalPages={totalPages}
-          />
-        </div>
-      )}
-
-      {hasMounted && (
-        <div ref={listRef} className="relative bg-gray-50 mt-4 h-full w-full">
-          <div className="relative w-full h-full">
-            {/* BACKGROUND GRID */}
-            <div
-              className="absolute inset-0 z-0 grid w-full h-full gap-1 pointer-events-none 
-                grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-14"
-            >
-              {Array.from({ length: columnCount }).map((_, i) => (
-                <div
-                  key={`grid-bg-${i}`}
-                  className="border-2 border-dashed border-gray-200 rounded-md"
-                />
-              ))}
-            </div>
-
-            {/* FOREGROUND GRID */}
-            <div
-              ref={itemsRef}
-              className="relative z-10 grid w-full h-full gap-1
-                grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-14"
-            >
-              {Array.from({ length: columnCount }).map((_, i) => {
-                const bookmark = displayedBookmarks[i];
-                return bookmark ? (
-                  <BookmarkItem
-                    key={bookmark.id}
-                    bookmark={bookmark}
-                    className="bookmark-anim"
-                  />
-                ) : (
-                  <div key={`empty-${i}`} />
-                );
-              })}
-            </div>
-
-            {/* EMPTY STATE MESSAGE */}
-            {bookmarks.length === 0 && (
-              <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-                <div className="rounded-md bg-gray-50 p-4 text-center">
-                  <h3 className="text-base font-medium text-gray-500">
-                    You don't have any links added yet
-                  </h3>
-                  <p className="text-sm text-gray-400 mt-1">
-                    Try adding some links to get started.
-                  </p>
-                </div>
-              </div>
-            )}
+    <>
+      <div className="relative flex h-[calc(100%_-_250px)] max-w-[1000px] m-auto">
+        {hasMounted && totalPages > 1 && (
+          <div className="absolute py-4 self-start top-1/2 transform -translate-y-1/2 -left-14 h-fit">
+            <Pagination
+              currentPage={currentPage}
+              onPageChange={handlePageChange}
+              totalPages={totalPages}
+            />
           </div>
-        </div>
-      )}
-    </div>
+        )}
+
+        {hasMounted && (
+          <div ref={listRef} className="relative bg-gray-50 mt-4 h-full w-full">
+            <div className="relative w-full h-full">
+              {/* BACKGROUND GRID */}
+              <div
+                className="absolute inset-0 z-0 grid w-full h-full gap-1 pointer-events-none 
+                grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-14"
+              >
+                {Array.from({ length: columnCount }).map((_, i) => (
+                  <div
+                    key={`grid-bg-${i}`}
+                    className="border-2 border-dashed border-gray-200 rounded-md"
+                  />
+                ))}
+              </div>
+
+              {/* FOREGROUND GRID */}
+              <div
+                ref={itemsRef}
+                className="relative z-10 grid w-full h-full gap-1
+                grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-14"
+              >
+                {Array.from({ length: columnCount }).map((_, i) => {
+                  const bookmark = displayedBookmarks[i];
+                  return bookmark ? (
+                    <BookmarkItem
+                      key={bookmark.id}
+                      bookmark={bookmark}
+                      className="bookmark-anim"
+                    />
+                  ) : (
+                    <div key={`empty-${i}`} />
+                  );
+                })}
+              </div>
+
+              {/* EMPTY STATE MESSAGE */}
+              {bookmarks.length === 0 && (
+                <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
+                  <div className="rounded-md bg-gray-50 p-4 text-center">
+                    <h3 className="text-base font-medium text-gray-500">
+                      You don't have any links added yet
+                    </h3>
+                    <p className="text-sm text-gray-400 mt-1">
+                      Try adding some links to get started.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+      <NavButtons />
+    </>
   );
 };

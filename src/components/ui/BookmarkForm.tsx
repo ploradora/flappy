@@ -1,12 +1,12 @@
 "use client";
 
-import { FormEvent, RefObject, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import { Bookmark } from "../../types";
 import { gsap } from "gsap";
-import { ArrowBigDown, Ban, ChevronDown, Loader, Send } from "lucide-react";
+import { Ban, ChevronDown, Loader, Send } from "lucide-react";
 import { arrowShowForm } from "@/utils/animations";
-import { addBookmark, toggleForm } from "@/app/actions";
-import { bookmarkForm } from "@/utils/bookmarkStorage";
+import { addBookmark } from "@/app/actions";
+import { NavButtons } from "./NavButtons";
 
 interface BookmarkFormProps {
   onSubmit: (bookmark: Bookmark) => void;
@@ -16,7 +16,7 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
 
   const formRef = useRef<HTMLFormElement>(null);
   const arrowDownRef = useRef<SVGSVGElement | null>(null);
@@ -29,11 +29,6 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
     if (arrowDownRef.current) {
       arrowShowForm(arrowDownRef.current);
     }
-  }, []);
-
-  // Initialize isOpen state from localStorage
-  useEffect(() => {
-    setIsOpen(bookmarkForm.getState());
   }, []);
 
   // Animate error message
@@ -57,6 +52,13 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
     }
   }, [error]);
 
+  useEffect(() => {
+    if (!hasMounted && formRef.current) {
+      gsap.set(formRef.current, { opacity: 0, display: "none" });
+      setHasMounted(true);
+    }
+  }, [hasMounted]);
+
   const validateUrl = (url: string): boolean => {
     try {
       new URL(url);
@@ -66,10 +68,9 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
     }
   };
 
-  const handleToggleForm = () => {
-    const newState = toggleForm();
-    setIsOpen(newState);
-  };
+  // const handleToggleForm = () => {
+  //   setIsOpen(!isOpen);
+  // };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -126,33 +127,13 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
   };
 
   return (
-    <div className="max-w-[500px] m-auto flex flex-col justify-center">
+    <div className="max-w-[450px] m-auto flex flex-col justify-center">
       <div>
         <form
-          ref={formRef}
+          // ref={formRef}
           onSubmit={handleSubmit}
           className="bg-white p-2 rounded-lg shadow-md mb-2 border border-gray-100 transition-all hover:shadow-lg relative overflow-hidden"
         >
-          <div
-            ref={successIconRef}
-            className="absolute top-4 right-4 opacity-0 pointer-events-none"
-          >
-            <div className="bg-green-100 text-green-500 p-2 rounded-full">
-              <svg
-                className="w-5 h-5"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                xmlns="http://www.w3.org/2000/svg"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-            </div>
-          </div>
-
           <div className="space-y-5">
             <div className="input-group flex items-center gap-2">
               <input
@@ -193,7 +174,7 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
         )}
         <div
           className="relative w-20 h-8 cursor-pointer m-auto"
-          onClick={handleToggleForm}
+          // onClick={handleToggleForm}
         >
           <ChevronDown
             ref={arrowDownRef}

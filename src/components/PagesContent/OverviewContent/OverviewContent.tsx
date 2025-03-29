@@ -53,19 +53,7 @@ export const OverviewContent = () => {
 
   return (
     <div ref={pageRef} className="relative mx-auto px-4 py-4 h-full">
-      {/* Success indicator (initially hidden) */}
-      <div
-        ref={successIndicatorRef}
-        className="fixed bottom-16 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 px-5 py-3 rounded-full shadow-md opacity-0 z-50 flex items-center border border-gray-100"
-      >
-        <span className="inline-block w-2 h-2 bg-green-500 rounded-full mr-2"></span>
-        Bookmark saved
-      </div>
-
-      {/* Bookmark form */}
       <BookmarkForm onSubmit={handleAddBookmark} />
-
-      {/* Bookmarks list */}
       <BookmarksList bookmarks={sortedBookmarks} />
     </div>
   );
