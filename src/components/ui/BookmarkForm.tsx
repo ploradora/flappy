@@ -9,7 +9,7 @@ import { addBookmark } from "@/app/actions";
 import { NavButtons } from "./NavButtons";
 
 interface BookmarkFormProps {
-  onSubmit: (bookmark: Bookmark) => void;
+  onSubmit: (bookmark: Omit<Bookmark, "id" | "createdAt">) => void;
 }
 
 export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
@@ -119,8 +119,8 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
 
     await new Promise((resolve) => setTimeout(resolve, 300));
 
-    const newBookmark = addBookmark({ url });
-    onSubmit(newBookmark);
+    // Let the parent component handle the actual bookmark addition
+    onSubmit({ url });
     setIsSubmitting(false);
     setUrl("");
     urlInputRef.current?.focus();

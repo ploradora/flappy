@@ -1,11 +1,10 @@
 "use client";
 
 import { FormEvent, useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import { gsap } from "gsap";
 import { getBookmarks } from "@/app/actions";
 import { Ban } from "lucide-react";
-import { BookmarksSubmitList } from "./BookmarksSubmitList";
+import { BookmarksSubmitList, URL_CHECK_EVENT } from "./BookmarksSubmitList";
 
 export const SubmitContent = () => {
   const [url, setUrl] = useState("");
@@ -13,7 +12,6 @@ export const SubmitContent = () => {
   const [error, setError] = useState("");
   const [showCongrats, setShowCongrats] = useState(false);
 
-  const router = useRouter();
   const formRef = useRef<HTMLFormElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
@@ -41,13 +39,13 @@ export const SubmitContent = () => {
           opacity: 1,
           y: 0,
           duration: 0.5,
-          ease: "back.out(1.7)",
+          ease: "back.out(0.5)",
           onComplete: () => {
             // Auto-hide the success message after 5 seconds
             gsap.to(successRef.current, {
               opacity: 0,
               y: 10,
-              delay: 5,
+              delay: 2,
               duration: 0.5,
               onComplete: () => setShowCongrats(false),
             });
@@ -58,29 +56,56 @@ export const SubmitContent = () => {
   }, [showCongrats]);
 
   const handleClearInput = () => {
-      setUrl("");
-      setError("");
+    setUrl("");
+    setError("");
+
+    // Reset highlighting by dispatching event with empty URL
+    window.dispatchEvent(
+      new CustomEvent(URL_CHECK_EVENT, {
+        detail: { url: "" },
+      })
+    );
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const allBookmarks = getBookmarks();
-    const checkUrl = allBookmarks.some(
-      (bookmark) => bookmark.url.toLowerCase() === url.toLowerCase()
-    );
-
-    if(checkUrl) {
-      setShowCongrats(true)
+    if (!url.trim()) {
+      setError("Please enter a URL");
       return;
     }
 
-    setError("URL not found");
+    // Normalize the URL for better comparison
+    const normalizedUrl = url.toLowerCase().trim();
+
+    const allBookmarks = getBookmarks();
+    const checkUrl = allBookmarks.some((bookmark) => {
+      // Normalize bookmark URL for comparison
+      const bookmarkUrl = bookmark.url.toLowerCase();
+      return (
+        bookmarkUrl.includes(normalizedUrl) ||
+        normalizedUrl.includes(bookmarkUrl)
+      );
+    });
+
+    // Dispatch custom event for URL submission
+    window.dispatchEvent(
+      new CustomEvent(URL_CHECK_EVENT, {
+        detail: { url: normalizedUrl },
+      })
+    );
+
+    if (checkUrl) {
+      setShowCongrats(true);
+      setError("");
+      return;
+    }
+
+    setError("URL not found in your bookmarks");
   };
 
   return (
     <div className="flex w-full h-full">
-
       <BookmarksSubmitList />
 
       <div className="flex-1 grid place-items-center bg-white">
@@ -115,61 +140,81 @@ export const SubmitContent = () => {
                 </div>
               )}
             </div>
-              <div className="flex items-center gap-1">
-                <button
-                  type="button"
-                  onClick={handleClearInput}
-                  className="flex-1 px-5 py-2 border border-gray-200 text-gray-500 rounded-md hover:bg-gray-100 text-sm cursor-pointer"
-                  >
-                  Clear
-                </button>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={handleClearInput}
+                className="flex-1 px-5 py-2 border border-gray-200 text-gray-500 rounded-md hover:bg-gray-100 text-sm cursor-pointer"
+              >
+                Clear
+              </button>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`flex-1 px-5 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all border border-glue-500 cursor-pointer ${
-                    isSubmitting ? "opacity-70 cursor-not-allowed" : ""
-                  } text-sm font-medium`}
-                >
-                  {isSubmitting ? (
-                    <span className="flex items-center">
-                      <svg
-                        className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        ></circle>
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        ></path>
-                      </svg>
-                      Checking...
-                    </span>
-                  ) : (
-                    "Check URL"
-                  )}
-                </button>
-              </div>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className={`flex-1 px-5 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all border border-glue-500 cursor-pointer ${
+                  isSubmitting ? "opacity-70 cursor-not-allowed" : ""
+                } text-sm font-medium`}
+              >
+                {isSubmitting ? (
+                  <span className="flex items-center">
+                    <svg
+                      className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    Checking...
+                  </span>
+                ) : (
+                  "Check URL"
+                )}
+              </button>
+            </div>
           </form>
         </div>
       </div>
 
-      <div 
-        ref={congratsRef} 
-        className=""
-      >
-
-      </div>
+      {/* Congrats Message */}
+      {showCongrats && (
+        <div
+          ref={successRef}
+          className="fixed bottom-8 right-8 bg-green-100 text-green-700 px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 border border-green-200"
+        >
+          <div className="h-8 w-8 rounded-full bg-green-500 text-white grid place-items-center">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fillRule="evenodd"
+                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                clipRule="evenodd"
+              />
+            </svg>
+          </div>
+          <div>
+            <div className="font-medium">Success!</div>
+            <div className="text-sm">URL found in your bookmarks</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

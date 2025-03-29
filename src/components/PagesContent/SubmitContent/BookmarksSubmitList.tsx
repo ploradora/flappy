@@ -6,54 +6,63 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Bookmark } from "@/types";
 
+// Create a custom event for URL check submission
+export const URL_CHECK_EVENT = "url-check-submission";
+
 // Client component to avoid hydration issues
 export const BookmarksSubmitList = () => {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
-  const [currentUrl, setCurrentUrl] = useState("");
+  const [submittedUrl, setSubmittedUrl] = useState(""); // Track submitted URL separately
 
   // Get bookmarks on client side only
   useEffect(() => {
-    setBookmarks(getBookmarks());
-  }, []);
-
-  // Monitor current URL for highlighting
-  useEffect(() => {
-    const updateCurrentUrl = () => {
-      // Get the last part of a URL path for simpler matching
-      const urlInput = document.getElementById("url") as HTMLInputElement;
-      if (urlInput) {
-        setCurrentUrl(urlInput.value);
-      }
+    // Create function to get latest bookmarks
+    const refreshBookmarks = () => {
+      setBookmarks(getBookmarks());
     };
 
-    // Initial check
-    updateCurrentUrl();
+    // Initial load
+    refreshBookmarks();
 
-    // Check on input changes in the bookmark form
-    const urlInput = document.getElementById("url") as HTMLInputElement;
-    if (urlInput) {
-      urlInput.addEventListener("input", updateCurrentUrl);
-      return () => urlInput.removeEventListener("input", updateCurrentUrl);
-    }
   }, []);
 
-  // Format date in a consistent way to avoid hydration issues
-  const formatDate = (timestamp: number) => {
-    if (!timestamp) return "Unknown date";
+  // Listen for URL submission events instead of tracking input directly
+  useEffect(() => {
+    const handleUrlSubmission = (e: CustomEvent) => {
+      setSubmittedUrl(e.detail.url);
+    };
 
-    // Use fixed date format that won't change between server/client
-    const date = new Date(timestamp);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
+    // Add event listener with type assertion
+    window.addEventListener(
+      URL_CHECK_EVENT,
+      handleUrlSubmission as EventListener
+    );
 
-    return `${year}-${month}-${day}`;
-  };
+    // Cleanup
+    return () => {
+      window.removeEventListener(
+        URL_CHECK_EVENT,
+        handleUrlSubmission as EventListener
+      );
+    };
+  }, []);
 
-  // Determine if a bookmark matches the current URL input
+  // Determine if a bookmark matches the submitted URL
   const isActiveBookmark = (bookmarkUrl: string) => {
-    if (!currentUrl || !bookmarkUrl) return false;
-    return bookmarkUrl.includes(currentUrl) || currentUrl.includes(bookmarkUrl);
+    if (!submittedUrl || !bookmarkUrl) return false;
+
+    // Normalize URLs for comparison (remove http/https, lowercase)
+    const normalizedInput = submittedUrl
+      .toLowerCase()
+      .replace(/^https?:\/\//, "");
+    const normalizedBookmark = bookmarkUrl
+      .toLowerCase()
+      .replace(/^https?:\/\//, "");
+
+    return (
+      normalizedBookmark.includes(normalizedInput) ||
+      normalizedInput.includes(normalizedBookmark)
+    );
   };
 
   return (
@@ -91,22 +100,17 @@ export const BookmarksSubmitList = () => {
                   href={bookmark.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`w-full p-4 transition-colors cursor-pointer ${
+                  className={`w-full p-4 transition-colors cursor-pointer rounded-md ${
                     isActive
-                      ? "bg-bookmark-active"
-                      : currentUrl
-                      ? "bg-bookmark-inactive"
+                      ? "bg-green-200"
+                      : submittedUrl
+                      ? "bg-gray-100 hover:bg-gray-200"
                       : "bg-orange-200 hover:bg-orange-100"
                   }`}
                 >
-                  <p className="text-sm text-gray-500 truncate mb-2">
+                  <p className="text-sm text-gray-500 truncate">
                     {bookmark.url}
                   </p>
-
-                  <div className="flex items-center text-xs text-gray-400">
-                    <Clock size={14} className="mr-1" />
-                    {formatDate(bookmark.createdAt)}
-                  </div>
                 </Link>
               );
             })}

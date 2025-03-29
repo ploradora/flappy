@@ -43,7 +43,17 @@ export const OverviewContent = () => {
     const newBookmark = addBookmark({ url });
 
     // Update local state with the new bookmark
-    setBookmarks((prevBookmarks) => [newBookmark, ...prevBookmarks]);
+    setBookmarks((prevBookmarks) => {
+      // Check if bookmark already exists in state
+      if (
+        prevBookmarks.some(
+          (bookmark) => bookmark.url.toLowerCase() === url.toLowerCase()
+        )
+      ) {
+        return prevBookmarks; // Return unchanged if duplicate
+      }
+      return [newBookmark, ...prevBookmarks];
+    });
 
     // Show success animation
     if (successIndicatorRef.current) {

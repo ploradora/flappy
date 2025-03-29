@@ -25,8 +25,18 @@ export const bookmarkStorage = {
     try {
       const bookmarks = localStorage.getItem(STORAGE_KEY);
       const parsedBookmarks = bookmarks ? JSON.parse(bookmarks) : [];
-      parsedBookmarks.push(bookmark);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedBookmarks));
+
+      // Check if bookmark with same URL already exists (case insensitive)
+      const exists = parsedBookmarks.some(
+        (existingBookmark: Bookmark) =>
+          existingBookmark.url.toLowerCase() === bookmark.url.toLowerCase()
+      );
+
+      // Only add if not a duplicate
+      if (!exists) {
+        parsedBookmarks.push(bookmark);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedBookmarks));
+      }
     } catch (error) {
       console.error("Error adding bookmark to localStorage:", error);
     }
