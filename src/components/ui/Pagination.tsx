@@ -71,7 +71,7 @@ export const Pagination = ({
   return (
     <div
       ref={paginationRef}
-      className="flex justify-center items-center mt-8 mb-4 space-x-1"
+      className="flex flex-col justify-start items-center space-y-2 bg-white p-2 rounded-lg shadow-sm border border-gray-100"
     >
       <button
         onClick={() => currentPage > 1 && onPageChange(currentPage - 1)}
@@ -84,7 +84,7 @@ export const Pagination = ({
         aria-label="Previous page"
       >
         <svg
-          className="h-4 w-4"
+          className="h-4 w-4 rotate-90"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -97,22 +97,24 @@ export const Pagination = ({
         </svg>
       </button>
 
+      <div className="w-full h-px bg-gray-100 my-1"></div>
+
       {getPageNumbers().map((page, index) =>
         page === "..." ? (
           <span
             key={`ellipsis-${index}`}
-            className="px-2 py-1 mx-1 text-sm text-gray-500"
+            className="px-2 py-1 text-sm text-gray-400 h-8 flex items-center"
           >
-            ...
+            ⋯
           </span>
         ) : (
           <button
             key={`page-${page}`}
             onClick={() => typeof page === "number" && onPageChange(page)}
-            className={`h-8 w-8 rounded-md focus:outline-none transition-colors text-sm cursor-pointer ${
+            className={`h-8 w-8 rounded-md focus:outline-none transition-colors text-sm cursor-pointer flex items-center justify-center ${
               page === currentPage
-                ? "bg-gray-100 text-gray-700 border border-gray-200"
-                : "bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                ? "bg-blue-50 text-blue-600 border border-blue-200 font-medium"
+                : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
             }`}
             aria-label={`Page ${page}`}
             aria-current={page === currentPage ? "page" : undefined}
@@ -121,6 +123,8 @@ export const Pagination = ({
           </button>
         )
       )}
+
+      <div className="w-full h-px bg-gray-100 my-1"></div>
 
       <button
         onClick={() =>
@@ -135,7 +139,7 @@ export const Pagination = ({
         aria-label="Next page"
       >
         <svg
-          className="h-4 w-4"
+          className="h-4 w-4 rotate-90"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"

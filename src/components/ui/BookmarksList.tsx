@@ -4,6 +4,7 @@ import { useEffect, useState, useRef } from "react";
 import { Bookmark } from "../../types";
 import { BookmarkItem } from "./BookmarkItem";
 import { gsap } from "gsap";
+import { Pagination } from "./Pagination";
 
 interface BookmarksListProps {
   bookmarks: Bookmark[];
@@ -16,7 +17,7 @@ const getColumnCount = () => {
   return 4; // default base
 };
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 14;
 
 export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -132,7 +133,16 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
   }
 
   return (
-    <div className="h-[calc(100%_-_250px)] max-w-[1000px] m-auto">
+    <div className="relative flex h-[calc(100%_-_250px)] max-w-[1000px] m-auto">
+      {hasMounted && totalPages > 1 && (
+        <div className="absolute py-4 self-start top-1/2 transform -translate-y-1/2 -left-14 h-fit">
+          <Pagination
+            currentPage={currentPage}
+            onPageChange={handlePageChange}
+            totalPages={totalPages}
+          />
+        </div>
+      )}
       {hasMounted && (
         <div ref={listRef} className="relative bg-gray-50 mt-4 h-full">
           <div
