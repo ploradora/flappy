@@ -32,3 +32,21 @@ export const bookmarkStorage = {
     }
   },
 };
+
+export const bookmarkForm = {
+  openCloseForm: (isOpen: boolean) => {
+    localStorage.setItem("showForm", JSON.stringify(isOpen));
+  },
+  getState: (): boolean => {
+    try {
+      const stored = localStorage.getItem("showForm");
+      return stored ? JSON.parse(stored) : false;
+    } catch {
+      return false;
+    }
+  },
+  toggle: () => {
+    const current = bookmarkForm.getState();
+    bookmarkForm.openCloseForm(!current);
+  },
+};

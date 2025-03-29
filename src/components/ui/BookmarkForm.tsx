@@ -5,7 +5,8 @@ import { Bookmark } from "../../types";
 import { gsap } from "gsap";
 import { ArrowBigDown, Ban, ChevronDown, Loader, Send } from "lucide-react";
 import { arrowShowForm } from "@/utils/animations";
-import { addBookmark } from "@/app/actions";
+import { addBookmark, toggleForm } from "@/app/actions";
+import { bookmarkForm } from "@/utils/bookmarkStorage";
 
 interface BookmarkFormProps {
   onSubmit: (bookmark: Bookmark) => void;
@@ -15,6 +16,7 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const formRef = useRef<HTMLFormElement>(null);
   const arrowDownRef = useRef<SVGSVGElement | null>(null);
@@ -27,6 +29,11 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
     if (arrowDownRef.current) {
       arrowShowForm(arrowDownRef.current);
     }
+  }, []);
+
+  // Initialize isOpen state from localStorage
+  useEffect(() => {
+    setIsOpen(bookmarkForm.getState());
   }, []);
 
   // Animate error message
@@ -57,6 +64,11 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
     } catch {
       return false;
     }
+  };
+
+  const handleToggleForm = () => {
+    const newState = toggleForm();
+    setIsOpen(newState);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -115,7 +127,7 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
 
   return (
     <div className="max-w-[500px] m-auto flex flex-col justify-center">
-      <div className="">
+      <div>
         <form
           ref={formRef}
           onSubmit={handleSubmit}
@@ -179,7 +191,10 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
             <span>{error}</span>
           </div>
         )}
-        <div className="relative w-20 h-8 cursor-pointer m-auto">
+        <div
+          className="relative w-20 h-8 cursor-pointer m-auto"
+          onClick={handleToggleForm}
+        >
           <ChevronDown
             ref={arrowDownRef}
             size={35}

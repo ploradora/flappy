@@ -207,7 +207,7 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
             {/* EMPTY STATE MESSAGE */}
             {bookmarks.length === 0 && (
               <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-                <div className="bg-white rounded-md shadow-sm border border-gray-100 p-4 text-center">
+                <div className="rounded-md bg-gray-50 p-4 text-center">
                   <h3 className="text-base font-medium text-gray-500">
                     You don't have any links added yet
                   </h3>
