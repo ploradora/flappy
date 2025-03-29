@@ -1,19 +1,63 @@
+"use client";
+
 import { getBookmarks } from "@/app/actions";
 import { Globe, Clock } from "lucide-react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import { Bookmark } from "@/types";
 
+// Client component to avoid hydration issues
 export const BookmarksSubmitList = () => {
-  const bookmarks = getBookmarks();
+  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const [currentUrl, setCurrentUrl] = useState("");
 
-  // Format date in a simple way
+  // Get bookmarks on client side only
+  useEffect(() => {
+    setBookmarks(getBookmarks());
+  }, []);
+
+  // Monitor current URL for highlighting
+  useEffect(() => {
+    const updateCurrentUrl = () => {
+      // Get the last part of a URL path for simpler matching
+      const urlInput = document.getElementById("url") as HTMLInputElement;
+      if (urlInput) {
+        setCurrentUrl(urlInput.value);
+      }
+    };
+
+    // Initial check
+    updateCurrentUrl();
+
+    // Check on input changes in the bookmark form
+    const urlInput = document.getElementById("url") as HTMLInputElement;
+    if (urlInput) {
+      urlInput.addEventListener("input", updateCurrentUrl);
+      return () => urlInput.removeEventListener("input", updateCurrentUrl);
+    }
+  }, []);
+
+  // Format date in a consistent way to avoid hydration issues
   const formatDate = (timestamp: number) => {
     if (!timestamp) return "Unknown date";
+
+    // Use fixed date format that won't change between server/client
     const date = new Date(timestamp);
-    return date.toLocaleDateString();
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const day = date.getDate().toString().padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+  };
+
+  // Determine if a bookmark matches the current URL input
+  const isActiveBookmark = (bookmarkUrl: string) => {
+    if (!currentUrl || !bookmarkUrl) return false;
+    return bookmarkUrl.includes(currentUrl) || currentUrl.includes(bookmarkUrl);
   };
 
   return (
-    <div className="flex-1 border-r bg-white border-gray-200 flex flex-col overflow-hidden">
+    <div className="flex-1 border-r h-[calc(100vh_-_52px)] bg-white border-gray-200 flex flex-col overflow-hidden">
       <div className="p-4 border-b border-gray-200 bg-white">
         <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
           <Globe size={18} className="text-blue-500" />
@@ -37,45 +81,38 @@ export const BookmarksSubmitList = () => {
           </div>
         </div>
       ) : (
-        <div className="flex-1 overflow-y-auto">
-          <div className="gap-1 p-4 w-full">
-            {bookmarks.map((bookmark) => (
-              <Link
-                key={bookmark.id}
-                href={bookmark.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full p-4 hover:bg-gray-100 transition-colors cursor-pointer bg-orange-200"
-              >
-                <p className="text-sm text-gray-500 truncate mb-2">
-                  {bookmark.url}
-                </p>
+        <div className="flex-1 overflow-y-auto scrollbar-thin">
+          <div className="flex flex-col gap-1 p-4 w-full">
+            {bookmarks.map((bookmark) => {
+              const isActive = isActiveBookmark(bookmark.url);
+              return (
+                <Link
+                  key={bookmark.id}
+                  href={bookmark.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`w-full p-4 transition-colors cursor-pointer ${
+                    isActive
+                      ? "bg-bookmark-active"
+                      : currentUrl
+                      ? "bg-bookmark-inactive"
+                      : "bg-orange-200 hover:bg-orange-100"
+                  }`}
+                >
+                  <p className="text-sm text-gray-500 truncate mb-2">
+                    {bookmark.url}
+                  </p>
 
-                <div className="flex items-center text-xs text-gray-400">
-                  <Clock size={14} className="mr-1" />
-                  {formatDate(bookmark.createdAt)}
-                </div>
-              </Link>
-            ))}
+                  <div className="flex items-center text-xs text-gray-400">
+                    <Clock size={14} className="mr-1" />
+                    {formatDate(bookmark.createdAt)}
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </div>
       )}
-
-      <style jsx>{`
-        .bookmarks-scrollbar::-webkit-scrollbar {
-          width: 8px;
-        }
-        .bookmarks-scrollbar::-webkit-scrollbar-track {
-          background-color: #f1f1f1;
-        }
-        .bookmarks-scrollbar::-webkit-scrollbar-thumb {
-          background-color: #d1d5db;
-          border-radius: 4px;
-        }
-        .bookmarks-scrollbar::-webkit-scrollbar-thumb:hover {
-          background-color: #9ca3af;
-        }
-      `}</style>
     </div>
   );
 };

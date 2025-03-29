@@ -83,7 +83,7 @@ export const SubmitContent = () => {
 
       <BookmarksSubmitList />
 
-      <div className="flex-1 h-[calc(100vh_-_100px)] grid place-items-center bg-white">
+      <div className="flex-1 grid place-items-center bg-white">
         <div>
           <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
             Check Your URL
