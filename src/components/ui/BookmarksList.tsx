@@ -26,8 +26,13 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
   const headerRef = useRef<HTMLDivElement>(null);
   const [columnCount, setColumnCount] = useState(4);
 
-  // Calculate total pages
   const totalPages = Math.max(1, Math.ceil(bookmarks.length / ITEMS_PER_PAGE));
+
+  const [hasMounted, setHasMounted] = useState(false);
+
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
 
   useEffect(() => {
     const updateColumns = () => setColumnCount(getColumnCount());
@@ -53,14 +58,14 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
   // Animate items when they change
   useEffect(() => {
     if (itemsRef.current) {
-      const items = itemsRef.current.children;
+      const animatedSpans = itemsRef.current.querySelectorAll(".bookmark-anim");
 
       gsap.fromTo(
-        items,
-        { opacity: 0, x: 10 },
+        animatedSpans,
+        { opacity: 0, y: -20 },
         {
           opacity: 1,
-          x: 0,
+          y: 0,
           duration: 0.4,
           stagger: 0.05,
           ease: "power3.out",
@@ -69,7 +74,6 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
       );
     }
 
-    // Animate header
     if (headerRef.current && displayedBookmarks.length > 0) {
       gsap.fromTo(
         headerRef.current,
@@ -113,27 +117,15 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
 
   // Empty state
   if (bookmarks.length === 0) {
-    return (
-      <div className="text-center py-12 px-6 bg-white rounded-lg border border-gray-100 shadow-sm">
-        <h3 className="text-xl font-medium text-gray-600">No bookmarks yet</h3>
-        <p className="text-gray-500 mt-2 mb-6">
-          Add your first bookmark using the form above
-        </p>
-        <div className="inline-block relative animate-bounce">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-8 w-8 text-blue-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M7 11l5-5m0 0l5 5m-5-5v12"
-            />
-          </svg>
+    displayedBookmarks.length === 0 && (
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="bg-white rounded-md shadow-sm border border-gray-100 p-4 text-center">
+          <h3 className="text-base font-medium text-gray-500">
+            You don't have any links added yet
+          </h3>
+          <p className="text-sm text-gray-400 mt-1">
+            Try adding some links to get started.
+          </p>
         </div>
       </div>
     );
@@ -141,24 +133,30 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
 
   return (
     <div className="h-[calc(100%_-_250px)] max-w-[1000px] m-auto">
-      <div ref={listRef} className="relative bg-gray-50 mt-4 h-full">
-        <div
-          ref={itemsRef}
-          className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-14 w-full h-full gap-1"
-        >
-          {Array.from({ length: columnCount }).map((_, i) => {
-            const bookmark = displayedBookmarks[i];
-            return bookmark ? (
-              <BookmarkItem key={bookmark.id} bookmark={bookmark} />
-            ) : (
-              <div
-                key={`empty-${i}`}
-                className="border-2 border-dashed border-gray-200 rounded-md "
-              />
-            );
-          })}
+      {hasMounted && (
+        <div ref={listRef} className="relative bg-gray-50 mt-4 h-full">
+          <div
+            ref={itemsRef}
+            className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-14 w-full h-full gap-1"
+          >
+            {Array.from({ length: columnCount }).map((_, i) => {
+              const bookmark = displayedBookmarks[i];
+              return bookmark ? (
+                <BookmarkItem
+                  key={bookmark.id}
+                  bookmark={bookmark}
+                  className="bookmark-anim"
+                />
+              ) : (
+                <div
+                  key={`empty-${i}`}
+                  className="border-2 border-dashed border-gray-200 rounded-md"
+                />
+              );
+            })}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
