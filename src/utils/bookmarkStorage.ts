@@ -13,26 +13,18 @@ export const bookmarkStorage = {
     }
   },
 
-  save: (bookmarks: Bookmark[]): void => {
-    try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(bookmarks));
-    } catch (error) {
-      console.error("Error saving bookmarks to localStorage:", error);
-    }
-  },
+  // save: (bookmarks: Bookmark[]): void => {
+  //   try {
+  //     localStorage.setItem(STORAGE_KEY, JSON.stringify(bookmarks));
+  //   } catch (error) {
+  //     console.error("Error saving bookmarks to localStorage:", error);
+  //   }
+  // },
 
   add: (bookmark: Bookmark): void => {
     const bookmarks = bookmarkStorage.getAll();
     bookmarks.push(bookmark);
-    bookmarkStorage.save(bookmarks);
-  },
-
-  update: (updatedBookmark: Bookmark): void => {
-    const bookmarks = bookmarkStorage.getAll();
-    const updatedBookmarks = bookmarks.map((bookmark) =>
-      bookmark.id === updatedBookmark.id ? updatedBookmark : bookmark
-    );
-    bookmarkStorage.save(updatedBookmarks);
+    // bookmarkStorage.save(bookmarks);
   },
 
   delete: (id: string): void => {
@@ -40,10 +32,10 @@ export const bookmarkStorage = {
     const filteredBookmarks = bookmarks.filter(
       (bookmark) => bookmark.id !== id
     );
-    bookmarkStorage.save(filteredBookmarks);
+    // bookmarkStorage.save(filteredBookmarks);
   },
 
-  clear: (): void => {
-    bookmarkStorage.save([]);
-  },
+  // clear: (): void => {
+  //   bookmarkStorage.save([]);
+  // },
 };

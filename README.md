@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+The process 
 
-## Getting Started
+1 after Brief
+  a couple of things  - localStorage
+                      - next app router ()
+                      - gsap
+                      - deploy it on Vercel
+                      - some notes on the 
+                      - timeframe 
 
-First, run the development server:
+2 - started building the 4 pages, the 3 that we navigate to and the redirect in case someone tries to acces one that Doesn’t exist.
+  - components folder where i started creating a folder for each page. 
+  - ui component where potentially the shared components would go into.
+  - utils folder where I added bookmarkStorage functionality into an object creating CRUD functions. 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+3 In the OverviewContent component added the form, the list of bookmars, pagination, and the toast which would appear when successfully saving the link to the list.
+ #### why ref instead of conditional? - I Could’ve done by adding a conditinoal but I wanted to use gsap Doesn't cause a component re-render and easy to add complex show/hide logic.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+    ----Form - wanted to be multifunctional. Added a 3 inputs initially, but I removed the description. I got carried away a bit. Logic to check and sanitize user input. 
+            Required validation for link prefix. In the same form I wanted to add the update button as well. By using the same input you'd cal a different function when the edit button gets triggered. 
+            
+    ----BookmarkItem
+    ----BookmarkList
+    ----Pagination
+    ----Layout
+    ----animations file
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+    Pages not-found and [...catchAll]
+     -not-found Runs in the browser after the component mounts, Provides visual feedback during redirection, [...c] Happens immediately during server-side rendering, Simpler, more -direct approach
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+    error.ts
+     -Display an error message if something goes wrong
+     -Automatically redirect to the overview page after 3 seconds
+     -Provide buttons to try again or go to the homepage immediately
+     -Show a subtle loading animation
 
-## Learn More
+    actions.server
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    
+1 After reading the brief I knew that i need a couple of things. LocalStorage since we don't have backend. app router for better performance and it's flexibility and it's habit, that's the way I set up the Environment . Gsap for transitions and animations (although there;s not a lot of animations in there) and I had to deliver it in four hours
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+What could you improve? 
+--Refactoring the code by making it more granular. The bookmarkForm has over 400 lines of code which is a no.
+--Delete svg's and use icons. Import them
+--Separation of concern
+--Context for the Overview component 

@@ -18,19 +18,6 @@ export const BookmarkItem = ({
 }: BookmarkItemProps) => {
   const itemRef = useRef<HTMLDivElement>(null);
 
-  // Format date
-  const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  // Get initial letter and generate a color based on the title
-  const getInitial = (title: string): string => {
-    return title.charAt(0).toUpperCase();
-  };
 
   const handleDelete = () => {
     if (itemRef.current) {
@@ -56,41 +43,8 @@ export const BookmarkItem = ({
     >
       <div className="flex justify-between items-center">
         <div className="flex items-center flex-grow min-w-0 pr-3">
-          <div
-            className={`flex-shrink-0 w-10 h-10 rounded-full bg-blue-400 ${bookmark.title} text-white flex items-center justify-center font-medium mr-3 text-lg shadow-sm`}
-          >
-            {getInitial(bookmark.title)}
-          </div>
           <div className="flex-grow min-w-0">
-            <h3 className="text-base font-medium mb-0.5 text-blue-600 hover:text-blue-800 transition-colors truncate">
-              <a
-                href={bookmark.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                title={bookmark.title}
-                className="flex items-center"
-              >
-                {bookmark.title}
-                <svg
-                  className="ml-1 h-3 w-3 inline-block text-gray-400"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                  <polyline points="15 3 21 3 21 9" />
-                  <line x1="10" y1="14" x2="21" y2="3" />
-                </svg>
-              </a>
-            </h3>
             <div className="text-xs text-gray-500 flex items-center">
-              <span className="inline-block mr-2">
-                {formatDate(bookmark.createdAt)}
-              </span>
               <a
                 href={bookmark.url}
                 target="_blank"

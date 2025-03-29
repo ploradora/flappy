@@ -7,7 +7,7 @@ import { bookmarkStorage } from "@/utils/bookmarkStorage";
  */
 export function getBookmarks(): Bookmark[] {
   const bookmarks = bookmarkStorage.getAll();
-  return bookmarks.sort((a, b) => b.createdAt - a.createdAt);
+  return bookmarks
 }
 
 /**
@@ -15,50 +15,17 @@ export function getBookmarks(): Bookmark[] {
  */
 export function addBookmark({
   url,
-  title,
-}: Omit<Bookmark, "id" | "createdAt" | "description">): Bookmark {
+}: Omit<Bookmark, "id" >): Bookmark {
   const newBookmark: Bookmark = {
     id: uuidv4(),
-    url,
-    title,
-    description: "",
-    createdAt: Date.now(),
+    url
   };
 
   const bookmarks = bookmarkStorage.getAll();
   const updatedBookmarks = [newBookmark, ...bookmarks];
-  bookmarkStorage.save(updatedBookmarks);
+  // bookmarkStorage.save(updatedBookmarks);
 
   return newBookmark;
-}
-
-/**
- * Update an existing bookmark
- */
-export function updateBookmark(
-  bookmarkId: string,
-  { url, title }: Omit<Bookmark, "id" | "createdAt" | "description">
-): Bookmark | null {
-  const bookmarks = bookmarkStorage.getAll();
-  const existingBookmark = bookmarks.find((b) => b.id === bookmarkId);
-
-  if (!existingBookmark) {
-    return null;
-  }
-
-  const updatedBookmark: Bookmark = {
-    ...existingBookmark,
-    url,
-    title,
-    description: "",
-  };
-
-  const updatedBookmarks = bookmarks.map((bookmark) =>
-    bookmark.id === updatedBookmark.id ? updatedBookmark : bookmark
-  );
-
-  bookmarkStorage.save(updatedBookmarks);
-  return updatedBookmark;
 }
 
 /**
@@ -73,6 +40,6 @@ export function deleteBookmark(id: string): boolean {
     return false;
   }
 
-  bookmarkStorage.save(updatedBookmarks);
+  // bookmarkStorage.save(updatedBookmarks);
   return true;
 }
