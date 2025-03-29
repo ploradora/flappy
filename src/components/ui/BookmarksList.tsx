@@ -5,13 +5,19 @@ import { Bookmark } from "../../types";
 import { BookmarkItem } from "./BookmarkItem";
 import { Pagination } from "./Pagination";
 import { gsap } from "gsap";
-import { BookmarkListCutout } from "./BookmarkListCutout";
 
 interface BookmarksListProps {
   bookmarks: Bookmark[];
   onEdit: (bookmark: Bookmark) => void;
   onDelete: (id: string) => void;
 }
+
+const getColumnCount = () => {
+  if (window.matchMedia("(min-width: 1280px)").matches) return 14; // xl
+  if (window.matchMedia("(min-width: 1024px)").matches) return 10; // lg
+  if (window.matchMedia("(min-width: 768px)").matches) return 6; // md
+  return 4; // default base
+};
 
 const ITEMS_PER_PAGE = 10;
 
@@ -25,10 +31,18 @@ export const BookmarksList = ({
   const listRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
+  const [columnCount, setColumnCount] = useState(4);
 
   // Calculate total pages
   const totalPages = Math.max(1, Math.ceil(bookmarks.length / ITEMS_PER_PAGE));
 
+  useEffect(() => {
+    const updateColumns = () => setColumnCount(getColumnCount());
+
+    updateColumns(); // initial
+    window.addEventListener("resize", updateColumns);
+    return () => window.removeEventListener("resize", updateColumns);
+  }, []);
   // Make sure currentPage is valid after bookmarks change
   useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) {
@@ -135,28 +149,27 @@ export const BookmarksList = ({
   return (
     <div className="h-[calc(100%_-_250px)] max-w-[1000px] m-auto">
       <div ref={listRef} className="relative bg-gray-50 mt-4 h-full">
-        <div ref={itemsRef} className="flex h-full gap-2">
-          {displayedBookmarks.length > 0 ? (
-            displayedBookmarks.map((bookmark) => (
+        <div
+          ref={itemsRef}
+          className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-10 xl:grid-cols-14 w-full h-full gap-1"
+        >
+          {Array.from({ length: columnCount }).map((_, i) => {
+            const bookmark = displayedBookmarks[i];
+            return bookmark ? (
               <BookmarkItem
                 key={bookmark.id}
                 bookmark={bookmark}
                 onEdit={onEdit}
                 onDelete={onDelete}
               />
-            ))
-          ) : (
-            <div className="text-center py-8 bg-white rounded-md border border-gray-100 shadow-sm">
-              <h3 className="text-base font-medium text-gray-500">
-                No bookmarks found
-              </h3>
-              <p className="text-sm text-gray-400 mt-1">
-                Try a different page or add new bookmarks
-              </p>
-            </div>
-          )}
+            ) : (
+              <div
+                key={`empty-${i}`}
+                className="border-2 border-dashed border-gray-200 rounded-md "
+              />
+            );
+          })}
         </div>
-        <BookmarkListCutout />
       </div>
       {/* <Pagination
         currentPage={currentPage}
