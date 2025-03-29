@@ -17,19 +17,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.className} bg-gray-50 h-screen flex flex-col`}
-      >
+      <body className={`${inter.className} bg-gray-50 h-screen flex flex-col`}>
         <header className="bg-white shadow-sm py-3">
-            <h1 className="text-xl font-bold text-blue-600 text-center">
-              <Link href="/" className="hover:text-blue-800 transition-colors">
-                Bookmark Manager
-              </Link>
-            </h1>
+          <h1 className="text-xl font-bold text-blue-600 text-center">
+            <Link href="/" className="hover:text-blue-800 transition-colors">
+              Bookmark Manager
+            </Link>
+          </h1>
         </header>
-        <main className="h-full">
-          {children}
-        </main>
+        <main className="h-full">{children}</main>
       </body>
     </html>
   );

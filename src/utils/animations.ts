@@ -1,5 +1,4 @@
 import { gsap } from "gsap";
-import { RefObject } from "react";
 
 export const pageTransition = (element: HTMLElement) => {
   gsap.fromTo(
@@ -92,7 +91,6 @@ export const showSuccessMessage = (element: HTMLElement, autoHide = true) => {
     }
   );
 };
-
 
 // +++++ OVERVIEW
 

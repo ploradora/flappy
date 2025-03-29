@@ -5,11 +5,14 @@ import { Bookmark } from "../../types";
 import Link from "next/link";
 
 interface BookmarkItemProps {
-  bookmark: Bookmark,
-  className?: string,
+  bookmark: Bookmark;
+  className?: string;
 }
 
-export const BookmarkItem: React.FC<BookmarkItemProps> = ({bookmark, className = ''}) => {
+export const BookmarkItem: React.FC<BookmarkItemProps> = ({
+  bookmark,
+  className = "",
+}) => {
   const itemRef = useRef<HTMLAnchorElement>(null);
 
   return (
