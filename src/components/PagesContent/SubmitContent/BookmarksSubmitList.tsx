@@ -2,9 +2,11 @@
 
 import { getBookmarks } from "@/app/actions";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Bookmark } from "@/types";
 import { ArrowLeft, LoaderCircle } from "lucide-react";
+import { gsap } from "gsap";
+
 // Create a custom event for URL check submission
 export const URL_CHECK_EVENT = "url-check-submission";
 
@@ -12,17 +14,50 @@ export const URL_CHECK_EVENT = "url-check-submission";
 export const BookmarksSubmitList = () => {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [submittedUrl, setSubmittedUrl] = useState(""); // Track submitted URL separately
+  const bookmarksListRef = useRef<HTMLDivElement>(null);
 
   // Get bookmarks on client side only
   useEffect(() => {
     // Create function to get latest bookmarks
     const refreshBookmarks = () => {
-      setBookmarks(getBookmarks());
+      const allBookmarks = getBookmarks();
+      // Sort bookmarks by createdAt, newest first
+      const sortedBookmarks = [...allBookmarks].sort(
+        (a, b) => b.createdAt - a.createdAt
+      );
+      setBookmarks(sortedBookmarks);
     };
 
     // Initial load
     refreshBookmarks();
   }, []);
+
+  // Animate bookmark items when they mount or change
+  useEffect(() => {
+    if (bookmarks.length > 0 && bookmarksListRef.current) {
+      const bookmarkItems =
+        bookmarksListRef.current.querySelectorAll(".bookmark-item");
+
+      gsap.fromTo(
+        bookmarkItems,
+        {
+          opacity: 0,
+          y: -15,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          stagger: {
+            each: 0.05,
+            from: "start",
+          },
+          ease: "power3.out",
+          clearProps: "all",
+        }
+      );
+    }
+  }, [bookmarks]);
 
   // Listen for URL submission events instead of tracking input directly
   useEffect(() => {
@@ -71,7 +106,10 @@ export const BookmarksSubmitList = () => {
         </div>
       ) : (
         <div className="relative flex-1 overflow-y-auto scrollbar-thin">
-          <div className="flex flex-col gap-1 p-4 w-full">
+          <div
+            ref={bookmarksListRef}
+            className="flex flex-col gap-1 p-4 w-full"
+          >
             {bookmarks.map((bookmark) => {
               const isActive = isActiveBookmark(bookmark.url);
               return (
@@ -80,7 +118,7 @@ export const BookmarksSubmitList = () => {
                   href={bookmark.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`h-[52px] w-full p-4 transition-colors cursor-pointer rounded-md z-20 group ${
+                  className={`h-[52px] w-full p-4 transition-colors cursor-pointer rounded-md z-20 group bookmark-item ${
                     isActive
                       ? "bg-green-700 text-white hover:bg-green-800"
                       : submittedUrl
@@ -88,7 +126,15 @@ export const BookmarksSubmitList = () => {
                       : "bg-gray-100 hover:bg-orange-400"
                   }`}
                 >
-                  <p className={`text-xl font-bold tracking-tighter text-gray-500 truncate group-hover:text-gray-800 ${isActive ? "text-white group-hover:text-white" : submittedUrl ? "text-gray-100 group-hover:text-gray-800" : ""}`}>
+                  <p
+                    className={`text-xl font-bold tracking-tighter text-gray-500 truncate group-hover:text-gray-800 ${
+                      isActive
+                        ? "text-white group-hover:text-white"
+                        : submittedUrl
+                        ? "text-gray-100 group-hover:text-gray-800"
+                        : ""
+                    }`}
+                  >
                     {bookmark.url}
                   </p>
                 </Link>
