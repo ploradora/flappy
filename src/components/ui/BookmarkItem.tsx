@@ -20,11 +20,11 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({
   ref={itemRef}
   href={bookmark.url}
   target="_blank"
-  className={`relative h-full flex text-gray-400 hover:text-gray-600 transition-colors bg-orange-100 rounded-md border border-gray-100 hover:bg-blue-50 z-20 ${className}`}
+  className={`relative h-full flex text-gray-400 hover:text-gray-600 transition-colors bg-orange-100 rounded-md border border-gray-100 hover:bg-blue-50 z-20 overflow-hidden ${className}`}
 >
-  <div className="absolute bottom-44 left-0 right-0 h-full flex items-center">
+  <div className="h-full flex items-end">
     <div 
-      className="absolute bottom-20 left-1/2 -translate-x-1/2 whitespace-nowrap -rotate-90"
+      className="absolute bottom-66 left-1/2 transform -translate-x-1/2 whitespace-nowrap -rotate-90 "
     >
       <span className="text-xl tracking-wider truncate block w-[500px]">
         {bookmark.url}
