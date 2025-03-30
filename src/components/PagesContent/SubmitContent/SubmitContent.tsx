@@ -85,6 +85,8 @@ export const SubmitContent = () => {
   const handleClearInput = () => {
     setUrl("");
     setError("");
+    setShowError(false);
+    setShowCongrats(false);
 
     // Reset highlighting by dispatching event with empty URL
     window.dispatchEvent(
@@ -111,19 +113,27 @@ export const SubmitContent = () => {
       return bookmarkUrl;
     });
 
-    // Dispatch custom event for URL submission
-    window.dispatchEvent(
-      new CustomEvent(URL_CHECK_EVENT, {
-        detail: { url },
-      })
-    );
-
     if (checkUrl) {
+      // Dispatch custom event for URL submission first, so the list can react to it
+      window.dispatchEvent(
+        new CustomEvent(URL_CHECK_EVENT, {
+          detail: { url },
+        })
+      );
+
+      // Then show success UI
       setShowCongrats(true);
       setShowError(false);
       setError("");
       return;
     }
+
+    // Not found case - still dispatch event but with empty URL to clear highlighting
+    window.dispatchEvent(
+      new CustomEvent(URL_CHECK_EVENT, {
+        detail: { url: "" },
+      })
+    );
 
     setError("URL not found in your bookmarks");
     setShowError(true);

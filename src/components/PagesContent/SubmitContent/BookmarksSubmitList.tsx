@@ -15,6 +15,8 @@ export const BookmarksSubmitList = () => {
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [submittedUrl, setSubmittedUrl] = useState(""); // Track submitted URL separately
   const bookmarksListRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const bookmarkItemRefs = useRef<Map<string, HTMLAnchorElement>>(new Map());
 
   // Get bookmarks on client side only
   useEffect(() => {
@@ -59,6 +61,75 @@ export const BookmarksSubmitList = () => {
     }
   }, [bookmarks]);
 
+  // Function to set ref for each bookmark item
+  const setBookmarkItemRef = (
+    element: HTMLAnchorElement | null,
+    url: string
+  ) => {
+    if (element) {
+      bookmarkItemRefs.current.set(url, element);
+    }
+  };
+
+  // Clear refs when bookmarks change
+  useEffect(() => {
+    // Clear the map when bookmarks change to prevent stale references
+    bookmarkItemRefs.current.clear();
+  }, [bookmarks]);
+
+  // Scroll to the matched bookmark when submittedUrl changes
+  useEffect(() => {
+    // Clear any previously highlighted items first
+    const allBookmarkItems = document.querySelectorAll(".bookmark-item");
+    if (allBookmarkItems.length > 0) {
+      gsap.to(allBookmarkItems, {
+        backgroundColor: "#f3f4f6", // gray-100 equivalent, default color
+        color: "#6b7280", // gray-500 equivalent
+        duration: 0.1,
+        ease: "power2.out",
+      });
+    }
+
+    // Only proceed with highlighting and scrolling if there's a valid submitted URL
+    if (
+      submittedUrl &&
+      bookmarkItemRefs.current.has(submittedUrl) &&
+      scrollContainerRef.current
+    ) {
+      const element = bookmarkItemRefs.current.get(submittedUrl);
+
+      if (element) {
+        // First highlight with animation
+        gsap.to(element, {
+          backgroundColor: "#047857", // green-700 equivalent
+          duration: 0.1,
+          ease: "power2.out",
+          onComplete: () => {
+            // Scroll the element into view with animation
+            const container = scrollContainerRef.current;
+            if (container) {
+              const elementTop = element.offsetTop;
+              const containerScrollTop = container.scrollTop;
+              const containerHeight = container.offsetHeight;
+              const elementHeight = element.offsetHeight;
+
+              // Calculate target scroll position to center the element
+              const scrollTarget =
+                elementTop - containerHeight / 2 + elementHeight / 2;
+
+              // Animate the scroll
+              gsap.to(container, {
+                scrollTop: scrollTarget,
+                duration: 0.4,
+                ease: "power2.inOut",
+              });
+            }
+          },
+        });
+      }
+    }
+  }, [submittedUrl]);
+
   // Listen for URL submission events instead of tracking input directly
   useEffect(() => {
     const handleUrlSubmission = (e: CustomEvent) => {
@@ -83,9 +154,7 @@ export const BookmarksSubmitList = () => {
   // Determine if a bookmark matches the submitted URL
   const isActiveBookmark = (bookmarkUrl: string) => {
     if (!submittedUrl || !bookmarkUrl) return false;
-
-    const highlightBookmark = bookmarkUrl === submittedUrl;
-    return highlightBookmark;
+    return bookmarkUrl === submittedUrl;
   };
 
   return (
@@ -105,7 +174,10 @@ export const BookmarksSubmitList = () => {
           </div>
         </div>
       ) : (
-        <div className="relative flex-1 overflow-y-auto scrollbar-thin">
+        <div
+          ref={scrollContainerRef}
+          className="relative flex-1 overflow-y-auto scrollbar-thin"
+        >
           <div
             ref={bookmarksListRef}
             className="flex flex-col gap-1 p-4 w-full"
@@ -116,23 +188,20 @@ export const BookmarksSubmitList = () => {
                 <Link
                   key={bookmark.id}
                   href={bookmark.url}
+                  ref={(el) => setBookmarkItemRef(el, bookmark.url)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`h-[52px] w-full p-4 transition-colors cursor-pointer rounded-md z-20 group bookmark-item ${
                     isActive
                       ? "bg-green-700 text-white hover:bg-green-800"
-                      : submittedUrl
-                      ? "bg-gray-100 hover:bg-gray-300"
                       : "bg-gray-100 hover:bg-orange-400"
                   }`}
                 >
                   <p
-                    className={`text-xl font-bold tracking-tighter text-gray-500 truncate group-hover:text-gray-800 ${
+                    className={`text-xl font-bold tracking-tighter truncate group-hover:text-gray-800 ${
                       isActive
                         ? "text-white group-hover:text-white"
-                        : submittedUrl
-                        ? "text-gray-100 group-hover:text-gray-800"
-                        : ""
+                        : "text-gray-500"
                     }`}
                   >
                     {bookmark.url}
