@@ -23,7 +23,6 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
   const successRef = useRef<HTMLDivElement>(null);
   const successIconRef = useRef<HTMLDivElement>(null);
 
-
   // Animate error message
   useEffect(() => {
     if (error && errorRef.current) {

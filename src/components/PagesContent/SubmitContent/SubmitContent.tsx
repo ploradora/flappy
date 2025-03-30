@@ -10,13 +10,13 @@ export const SubmitContent = () => {
   const [url, setUrl] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [showError, setShowError] = useState(false);
   const [showCongrats, setShowCongrats] = useState(false);
 
   const formRef = useRef<HTMLFormElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const congratsRef = useRef<HTMLDivElement>(null);
 
   // Animate form on mount
   useEffect(() => {
@@ -34,7 +34,7 @@ export const SubmitContent = () => {
     if (showCongrats && successRef.current) {
       gsap.fromTo(
         successRef.current,
-        { opacity: 0, y: -20 },
+        { opacity: 0, y: -5 },
         {
           opacity: 1,
           y: 0,
@@ -44,7 +44,7 @@ export const SubmitContent = () => {
             // Auto-hide the success message after 5 seconds
             gsap.to(successRef.current, {
               opacity: 0,
-              y: 10,
+              y: -5,
               delay: 2,
               duration: 0.5,
               onComplete: () => setShowCongrats(false),
@@ -54,6 +54,32 @@ export const SubmitContent = () => {
       );
     }
   }, [showCongrats]);
+
+  // Animate error message when it appears
+  useEffect(() => {
+    if (showError && errorRef.current) {
+      gsap.fromTo(
+        errorRef.current,
+        { opacity: 0, y: -5 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.5,
+          ease: "back.out(0.5)",
+          onComplete: () => {
+            // Auto-hide the success message after 5 seconds
+            gsap.to(errorRef.current, {
+              opacity: 0,
+              y: -5,
+              delay: 2,
+              duration: 0.5,
+              onComplete: () => setShowError(false),
+            });
+          },
+        }
+      );
+    }
+  }, [showError]);
 
   const handleClearInput = () => {
     setUrl("");
@@ -72,6 +98,8 @@ export const SubmitContent = () => {
 
     if (!url.trim()) {
       setError("Please enter a URL");
+      setShowError(true);
+      setShowCongrats(false);
       return;
     }
 
@@ -91,11 +119,14 @@ export const SubmitContent = () => {
 
     if (checkUrl) {
       setShowCongrats(true);
+      setShowError(false);
       setError("");
       return;
     }
 
     setError("URL not found in your bookmarks");
+    setShowError(true);
+    setShowCongrats(false);
   };
 
   return (
@@ -111,7 +142,7 @@ export const SubmitContent = () => {
           <form
             ref={formRef}
             onSubmit={handleSubmit}
-            className="bg-white p-4 mb-2 rounded-lg shadow-md border border-gray-100 w-[350px]"
+            className="bg-white p-4 mb-2 rounded-lg shadow-md border border-gray-100 w-[350px] z-30"
           >
             <div className="mb-4">
               <input
@@ -171,7 +202,7 @@ export const SubmitContent = () => {
               </button>
             </div>
           </form>
-          {error && (
+          {showError && (
             <div
               ref={errorRef}
               className="bg-yellow-50 border-1 text-sm border-yellow-400 text-yellow-700 pl-4 py-2 gap-2 rounded-md mb-2 flex items-center"

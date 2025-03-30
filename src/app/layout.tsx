@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} bg-gray-50 h-screen flex flex-col`}>
-        <header className="bg-white shadow-sm py-3">
+        <header className="bg-white border-b border-gray-100 py-3">
           <h1 className="text-xl font-bold text-blue-600 text-center">
             <Link href="/" className="hover:text-blue-800 transition-colors">
               Bookmark Manager
