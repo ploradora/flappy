@@ -4,7 +4,6 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import { Bookmark } from "../../types";
 import { gsap } from "gsap";
 import { Ban, Loader, Send, CheckCircle } from "lucide-react";
-import { arrowShowForm } from "@/utils/animations";
 import { getBookmarks } from "@/app/actions";
 
 interface BookmarkFormProps {
@@ -19,7 +18,6 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
   const [hasMounted, setHasMounted] = useState(false);
 
   const formRef = useRef<HTMLFormElement>(null);
-  const arrowDownRef = useRef<SVGSVGElement | null>(null);
   const urlInputRef = useRef<HTMLInputElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
   const successRef = useRef<HTMLDivElement>(null);

@@ -51,18 +51,9 @@ export const BookmarksSubmitList = () => {
   const isActiveBookmark = (bookmarkUrl: string) => {
     if (!submittedUrl || !bookmarkUrl) return false;
 
-    // Normalize URLs for comparison (remove http/https, lowercase)
-    const normalizedInput = submittedUrl
-      .toLowerCase()
-      .replace(/^https?:\/\//, "");
-    const normalizedBookmark = bookmarkUrl
-      .toLowerCase()
-      .replace(/^https?:\/\//, "");
-
-    return (
-      normalizedBookmark.includes(normalizedInput) ||
-      normalizedInput.includes(normalizedBookmark)
-    );
+    const highlightBookmark = bookmarkUrl === submittedUrl;
+    return highlightBookmark;
+    
   };
 
   return (

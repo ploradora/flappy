@@ -34,7 +34,7 @@ export const SubmitContent = () => {
     if (showCongrats && successRef.current) {
       gsap.fromTo(
         successRef.current,
-        { opacity: 0, y: 20 },
+        { opacity: 0, y: -20 },
         {
           opacity: 1,
           y: 0,
@@ -75,23 +75,17 @@ export const SubmitContent = () => {
       return;
     }
 
-    // Normalize the URL for better comparison
-    const normalizedUrl = url.toLowerCase().trim();
-
     const allBookmarks = getBookmarks();
     const checkUrl = allBookmarks.some((bookmark) => {
       // Normalize bookmark URL for comparison
-      const bookmarkUrl = bookmark.url.toLowerCase();
-      return (
-        bookmarkUrl.includes(normalizedUrl) ||
-        normalizedUrl.includes(bookmarkUrl)
-      );
+      const bookmarkUrl = bookmark.url === url;
+      return bookmarkUrl;
     });
 
     // Dispatch custom event for URL submission
     window.dispatchEvent(
       new CustomEvent(URL_CHECK_EVENT, {
-        detail: { url: normalizedUrl },
+        detail: { url },
       })
     );
 
@@ -109,15 +103,15 @@ export const SubmitContent = () => {
       <BookmarksSubmitList />
 
       <div className="flex-1 grid place-items-center bg-white">
-        <div>
-          <h1 className="text-2xl font-bold mb-6 text-center text-gray-800">
+        <div className="h-[300px]">
+          <h1 className="text-xl font-bold mb-3 text-center text-gray-800">
             Check Your URL
           </h1>
 
           <form
             ref={formRef}
             onSubmit={handleSubmit}
-            className="bg-white p-4 rounded-lg shadow-md border border-gray-100 w-[350px]"
+            className="bg-white p-4 mb-2 rounded-lg shadow-md border border-gray-100 w-[350px]"
           >
             <div className="mb-4">
               <input
@@ -127,18 +121,9 @@ export const SubmitContent = () => {
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://example.com"
-                className="w-full px-4 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all mb-2"
+                className="w-full px-4 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                 disabled={isSubmitting}
               />
-              {error && (
-                <div
-                  ref={errorRef}
-                  className="bg-yellow-50 border-1 text-sm border-yellow-400 text-yellow-700 pl-4 py-2 gap-2 rounded-md mb-2 flex items-center"
-                >
-                  <Ban size={18} />
-                  <span>{error}</span>
-                </div>
-              )}
             </div>
             <div className="flex items-center gap-1">
               <button
@@ -186,35 +171,37 @@ export const SubmitContent = () => {
               </button>
             </div>
           </form>
+          {error && (
+            <div
+              ref={errorRef}
+              className="bg-yellow-50 border-1 text-sm border-yellow-400 text-yellow-700 pl-4 py-2 gap-2 rounded-md mb-2 flex items-center"
+            >
+              <Ban size={18} />
+              <span>{error}</span>
+            </div>
+          )}
+          {showCongrats && (
+            <div
+              ref={successRef}
+              className="bg-green-100 text-green-700 border-1 text-sm border-green-500 pl-4 py-2 gap-2 rounded-md mb-2 flex items-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-5 w-5"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span>It's here!!!</span>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Congrats Message */}
-      {showCongrats && (
-        <div
-          ref={successRef}
-          className="fixed bottom-8 right-8 bg-green-100 text-green-700 px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 border border-green-200"
-        >
-          <div className="h-8 w-8 rounded-full bg-green-500 text-white grid place-items-center">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-            >
-              <path
-                fillRule="evenodd"
-                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </div>
-          <div>
-            <div className="font-medium">Success!</div>
-            <div className="text-sm">URL found in your bookmarks</div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
