@@ -3,7 +3,15 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Bookmark } from "../../types";
 import { gsap } from "gsap";
-import { Ban, Loader, Send, CheckCircle, Plus, Link, PartyPopper } from "lucide-react";
+import {
+  Ban,
+  Loader,
+  Send,
+  CheckCircle,
+  Plus,
+  Link,
+  PartyPopper,
+} from "lucide-react";
 import { getBookmarks } from "@/app/actions";
 import { useRouter } from "next/navigation";
 interface BookmarkFormProps {
@@ -18,7 +26,9 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
 
-  const navButtonRef = useRef<HTMLDivElement>(null);
+  const navButtonsRef = useRef<HTMLDivElement>(null);
+  const navButtonRefSend = useRef<HTMLButtonElement>(null);
+  const navButtonRefParty = useRef<HTMLButtonElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const urlInputRef = useRef<HTMLInputElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
@@ -173,7 +183,54 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
         <h1 className="font-bold py-2 text-center text-gray-600">
           Add a bookmark
         </h1>
-        <div className="relative flex justify-center items-center">
+        <div
+          onMouseEnter={() => {
+            const tl = gsap.timeline();
+          
+            
+            // Slide the whole container
+            tl.to(navButtonsRef.current, {
+              x: 101,
+              duration: 0.3,
+              ease: "power2.out",
+            });
+          
+            // Party button bounces within its new position
+            tl.to(
+              navButtonRefParty.current,
+              {
+                x: 5, // bounce out a bit
+                duration: 0.15,
+                ease: "power1.out",
+              },
+              "-=0.20"
+            ).to(
+              navButtonRefParty.current,
+              {
+                x: 0,
+                ease: "back.out(1.7)",
+              },
+            );
+          }}
+          
+          onMouseLeave={() => {
+            const tl = gsap.timeline();
+          
+            // Reset all back to original
+            tl.to([navButtonRefParty.current, navButtonRefSend.current], {
+              x: 0,
+              duration: 0.15,
+              ease: "power2.inOut",
+            });
+          
+            tl.to(navButtonsRef.current, {
+              x: 0,
+              duration: 0.3,
+              ease: "power2.inOut",
+            });
+          }}
+          className="relative flex justify-center items-center"
+        >
           <form
             onSubmit={handleSubmit}
             className="absolute top-0 right-0 w-full bg-white p-2 rounded-lg shadow-sm border border-gray-100 transition-all hover:shadow-md relative overflow-hidden z-30"
@@ -206,21 +263,23 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
               </div>
             </div>
           </form>
-          <div 
-            ref={navButtonRef}
-            className="absolute top-1/2 transform -translate-y-1/2 right-0 flex justify-center gap-1 items-center"
+          <div
+            ref={navButtonsRef}
+            className="absolute top-1/2 transform -translate-y-1/2 right-0 flex justify-end gap-1 items-center z-10 w-[120px] h-[50px]"
           >
             <button
-              onClick={() => router.push("/results")}
-              className="w-[46px] h-[46px] text-gray-600 text-sm rounded-md p-2 bg-blue-100"
+              ref={navButtonRefSend}
+              onClick={() => router.push("/submit")}
+              className="w-[46px] h-[46px] text-gray-600 text-sm rounded-md p-2 bg-blue-100 cursor-pointer"
             >
               <span className="flex items-center justify-center">
                 <Send size={19} />
               </span>
             </button>
             <button
+              ref={navButtonRefParty}
               onClick={() => router.push("/results")}
-              className="w-[46px] h-[46px] text-gray-600 text-sm rounded-md p-2 bg-blue-100"
+              className="w-[46px] h-[46px] text-gray-600 text-sm rounded-md p-2 bg-blue-100 cursor-pointer"
             >
               <span className="flex items-center justify-center">
                 <PartyPopper size={19} />
