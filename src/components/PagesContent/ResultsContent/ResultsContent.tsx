@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { gsap } from "gsap";
-import { ArrowLeft, CheckIcon } from "lucide-react";
+import { ArrowLeft, CheckIcon, ExternalLink } from "lucide-react";
 import { getBookmarks } from "@/app/actions";
 
 export const ResultsContent = () => {
@@ -89,7 +89,7 @@ export const ResultsContent = () => {
       className="min-h-full flex items-center justify-center px-2 py-6 bg-zinc-900"
     >
       <div ref={cardRef} className="w-full max-w-md mx-auto">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden mb-8">
+        <div className="rounded-lg shadow-lg overflow-hidden mb-8">
           {/* Header section with icon */}
           <div className="bg-zinc-800 text-gray-100 py-8 text-center relative ">
             <div
@@ -122,14 +122,17 @@ export const ResultsContent = () => {
               target="_blank"
               className="block text-center text-white font-bold hover:text-gray-300 text-xl pt-2 mb-6 truncate max-w-full overflow-hidden whitespace-nowrap"
             >
-              {lastSubmission}
+              <div className="flex items-center justify-center gap-2 hover:text-blue-400">
+                <ExternalLink size={18} className="text-blue-400" />
+                {lastSubmission}
+              </div>
             </Link>
             <div className="text-center">
               <Link
                 href="/overview"
                 className="flex items-center gap-1 overview-link inline-flex bg-zinc-700 items-center justify-center px-6 py-3 text-white font-medium rounded-lg hover:bg-zinc-800"
               >
-                <ArrowLeft size={18}/>
+                <ArrowLeft size={18} />
                 Back to Overview
               </Link>
             </div>

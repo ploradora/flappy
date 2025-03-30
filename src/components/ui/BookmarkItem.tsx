@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Bookmark } from "../../types";
 import Link from "next/link";
 import gsap from "gsap";
@@ -19,6 +19,15 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({
 }) => {
   const itemRef = useRef<HTMLAnchorElement>(null);
   const linkButtonsRef = useRef<HTMLDivElement>(null);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
   return (
     <div
       className="relative group hover:bg-orange-400 rounded-t-md"
@@ -43,11 +52,11 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({
         ref={itemRef}
         href={bookmark.url}
         target="_blank"
-        className={`relative h-full flex text-gray-600 hover:text-gray-600 transition-colors bg-gray-100 rounded-t-md border border-gray-100 hover:bg-orange-400 hover:border-orange-400 z-20 overflow-hidden ${className}`}
+        className={`relative h-full flex text-gray-600 hover:text-gray-600 transition-colors bg-gray-100 rounded-t-md border border-gray-100 hover:bg-orange-400 hover:border-orange-400 z-20 overflow-hidden group-hover:bg-orange-400 ${className} ${isHovered ? "bg-orange-400 border-orange-400" : ""}`}
       >
         <div className="h-full flex items-end">
           <div className="absolute bottom-66 left-1/2 transform -translate-x-1/2 whitespace-nowrap -rotate-90">
-            <span className="text-xl tracking-wider truncate block w-[500px] text-gray-500 transition-colors duration-200 group-hover:text-gray-800">
+            <span className="text-3xl font-bold tracking-tighter truncate block w-[500px] text-gray-500 transition-colors duration-200 group-hover:text-gray-800">
               {bookmark.url}
             </span>
           </div>
@@ -58,21 +67,27 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({
       <div
         ref={linkButtonsRef}
         className="absolute w-full pt-1 left-0 flex opacity-0 group-hover:opacity-100 transition-all pointer-events-none group-hover:pointer-events-auto"
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
       >
         <div className="w-full flex items-center bg-orange-400 rounded-b-md">
           <button
             onClick={(e) => {
               e.preventDefault();
             }}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
             className="flex-1 rounded-bl-md px-2 py-1 text-xs text-gray-800 hover:bg-gray-100 cursor-pointer"
           >
-            <Pencil size={15} />
+            <Pencil size={15} strokeWidth={2.5} />
           </button>
           <button
             // onClick={() => onDelete(bookmark.id)}
-            className="flex-1 rounded-br-md  px-2 py-1 text-xs text-gray-800 hover:bg-gray-100 cursor-pointer"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+            className="flex-1 rounded-br-md px-2 py-1 text-xs text-gray-800 hover:bg-gray-100 cursor-pointer"
           >
-            <Trash size={15} />
+            <Trash size={15} strokeWidth={2.5} />
           </button>
         </div>
       </div>

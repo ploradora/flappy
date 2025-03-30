@@ -80,7 +80,7 @@ export const BookmarksSubmitList = () => {
                   href={bookmark.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`w-full p-4 transition-colors cursor-pointer rounded-md z-20 ${
+                  className={`h-[52px] w-full p-4 transition-colors cursor-pointer rounded-md z-20 group ${
                     isActive
                       ? "bg-green-700 text-white hover:bg-green-800"
                       : submittedUrl
@@ -88,7 +88,7 @@ export const BookmarksSubmitList = () => {
                       : "bg-gray-100 hover:bg-orange-400"
                   }`}
                 >
-                  <p className={`text-sm text-gray-500 truncate ${isActive ? "text-white" : submittedUrl ? "text-gray-800" : ""}`}>
+                  <p className={`text-xl font-bold tracking-tighter text-gray-500 truncate group-hover:text-gray-800 ${isActive ? "text-white group-hover:text-white" : submittedUrl ? "text-gray-100 group-hover:text-gray-800" : ""}`}>
                     {bookmark.url}
                   </p>
                 </Link>
