@@ -1,7 +1,7 @@
 "use client";
 
 import { getBookmarks } from "@/app/actions";
-import { Globe, Clock } from "lucide-react";
+import { Globe } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Bookmark } from "@/types";

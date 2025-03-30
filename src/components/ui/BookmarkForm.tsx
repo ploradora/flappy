@@ -3,10 +3,9 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Bookmark } from "../../types";
 import { gsap } from "gsap";
-import { Ban, ChevronDown, Loader, Send } from "lucide-react";
+import { Ban, Loader, Send, CheckCircle } from "lucide-react";
 import { arrowShowForm } from "@/utils/animations";
-import { addBookmark, getBookmarks } from "@/app/actions";
-import { NavButtons } from "./NavButtons";
+import { getBookmarks } from "@/app/actions";
 
 interface BookmarkFormProps {
   onSubmit: (bookmark: Omit<Bookmark, "id" | "createdAt">) => void;
@@ -15,6 +14,7 @@ interface BookmarkFormProps {
 export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
 
@@ -22,14 +22,9 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
   const arrowDownRef = useRef<SVGSVGElement | null>(null);
   const urlInputRef = useRef<HTMLInputElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
+  const successRef = useRef<HTMLDivElement>(null);
   const successIconRef = useRef<HTMLDivElement>(null);
 
-  // Animate arrow form
-  useEffect(() => {
-    if (arrowDownRef.current) {
-      arrowShowForm(arrowDownRef.current);
-    }
-  }, []);
 
   // Animate error message
   useEffect(() => {
@@ -39,34 +34,61 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
         { opacity: 0, y: -10 },
         { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }
       );
-  
+
       if (error.includes("URL") && urlInputRef.current) {
         gsap.to(urlInputRef.current, {
           x: 5,
           duration: 0.1,
-          repeat: 5,  
+          repeat: 5,
           yoyo: true,
           onComplete: () => {
             setTimeout(() => {
-              gsap.to(errorRef.current, { 
-                opacity: 0, 
+              gsap.to(errorRef.current, {
+                opacity: 0,
                 duration: 0.3,
-                y: -10 
+                y: -10,
               });
             }, 3000);
-          }
+          },
         });
       } else {
         setTimeout(() => {
-          gsap.to(errorRef.current, { 
-            opacity: 0, 
+          gsap.to(errorRef.current, {
+            opacity: 0,
             duration: 0.3,
-            y: -10 
+            y: -10,
           });
-        }, 3000); 
+        }, 3000);
       }
     }
   }, [error]);
+
+  // Animate success message
+  useEffect(() => {
+    if (success && successRef.current) {
+      gsap.fromTo(
+        successRef.current,
+        { opacity: 0, y: -10 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.3,
+          ease: "power2.out",
+          onComplete: () => {
+            // Auto-hide success message after 4 seconds
+            setTimeout(() => {
+              gsap.to(successRef.current, {
+                opacity: 0,
+                duration: 0.3,
+                y: -10,
+                onComplete: () => setSuccess(""),
+              });
+            }, 4000);
+          },
+        }
+      );
+    }
+  }, [success]);
 
   useEffect(() => {
     if (!hasMounted && formRef.current) {
@@ -89,12 +111,14 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
 
     if (!validateUrl(url)) {
       setError("Please enter a valid URL including http:// or https://");
+      setSuccess("");
       return;
     }
     const allBookmarks = getBookmarks();
 
     if (allBookmarks.some((bookmark) => bookmark.url === url)) {
       setError("Bookmark already exists");
+      setSuccess("");
       return;
     }
     setError("");
@@ -138,6 +162,7 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
 
     // Let the parent component handle the actual bookmark addition
     onSubmit({ url });
+    setSuccess("Bookmark added successfully");
     setIsSubmitting(false);
     setUrl("");
     urlInputRef.current?.focus();
@@ -146,7 +171,9 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
   return (
     <div className="max-w-[450px] m-auto flex flex-col justify-start h-[150px]">
       <div>
-        <h1 className="font-bold py-2 text-center text-gray-600">Add a bookmark</h1>
+        <h1 className="font-bold py-2 text-center text-gray-600">
+          Add a bookmark
+        </h1>
         <form
           onSubmit={handleSubmit}
           className="bg-white p-2 rounded-lg shadow-sm mb-2 border border-gray-100 transition-all hover:shadow-md relative overflow-hidden z-30"
@@ -189,13 +216,14 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
             <span>{error}</span>
           </div>
         )}
-         {error && (
+
+        {success && (
           <div
-            ref={errorRef}
-            className="bg-yellow-50 border-1 text-sm border-yellow-400 text-yellow-700 pl-4 py-2 gap-2 rounded-md mb-2 flex items-center"
+            ref={successRef}
+            className="bg-green-50 border-1 text-sm border-green-400 text-green-700 pl-4 py-2 gap-2 rounded-md mb-2 flex items-center"
           >
-            <Ban size={18} />
-            <span>{error}</span>
+            <CheckCircle size={18} />
+            <span>{success}</span>
           </div>
         )}
       </div>
