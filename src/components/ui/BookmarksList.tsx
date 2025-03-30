@@ -18,15 +18,22 @@ const getColumnCount = () => {
   return 4; // default base
 };
 
-export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
+export const BookmarksList = ({
+  bookmarks: initialBookmarks,
+}: BookmarksListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
-  // const [bookmarks, setBookmarks] = useState<Bookmark[]>(initialBookmarks);
+  const [bookmarks, setBookmarks] = useState<Bookmark[]>(initialBookmarks);
   const [displayedBookmarks, setDisplayedBookmarks] = useState<Bookmark[]>([]);
   const listRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const [columnCount, setColumnCount] = useState(4);
   const [itemsPerPage, setItemsPerPage] = useState(columnCount);
+
+  // Update bookmarks when initialBookmarks changes
+  useEffect(() => {
+    setBookmarks(initialBookmarks);
+  }, [initialBookmarks]);
 
   const totalPages = Math.max(1, Math.ceil(bookmarks.length / itemsPerPage));
 
@@ -142,10 +149,10 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
     }
   };
 
-  // const handleDelete = (id: string) => {
-  //   deleteBookmark(id); // Remove from localStorage
-  //   setBookmarks(prev => prev.filter(b => b.id !== id)); // Update state
-  // };
+  const handleDelete = (id: string) => {
+    // Update local state immediately for responsive UI
+    setBookmarks((prev) => prev.filter((b) => b.id !== id));
+  };
 
   return (
     <>
@@ -161,7 +168,10 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
         )}
 
         {hasMounted && (
-          <div ref={listRef} className="relative mt-4 h-full w-full p-1 rounded-lg">
+          <div
+            ref={listRef}
+            className="relative mt-4 h-full w-full p-1 rounded-lg"
+          >
             <div className="relative w-full h-full">
               {/* BACKGROUND GRID */}
               <div
@@ -188,7 +198,7 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
                     <BookmarkItem
                       key={bookmark.id}
                       bookmark={bookmark}
-                      // onDelete={handleDelete}
+                      onDelete={handleDelete}
                       className="bookmark-anim"
                     />
                   ) : (

@@ -6,16 +6,17 @@ import Link from "next/link";
 import gsap from "gsap";
 import { Pencil, Trash } from "lucide-react";
 import { deleteBookmark } from "@/app/actions";
+
 interface BookmarkItemProps {
   bookmark: Bookmark;
   className?: string;
-  // onDelete: (id: string) => void;
+  onDelete: (id: string) => void;
 }
 
 export const BookmarkItem: React.FC<BookmarkItemProps> = ({
   bookmark,
   className = "",
-  // onDelete,
+  onDelete,
 }) => {
   const itemRef = useRef<HTMLAnchorElement>(null);
   const linkButtonsRef = useRef<HTMLDivElement>(null);
@@ -28,6 +29,14 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
+
+  const handleDelete = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    deleteBookmark(bookmark.id);
+    onDelete(bookmark.id);
+  };
+
   return (
     <div
       className="relative group hover:bg-orange-400 rounded-t-md"
@@ -52,7 +61,9 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({
         ref={itemRef}
         href={bookmark.url}
         target="_blank"
-        className={`relative h-full flex text-gray-600 hover:text-gray-600 transition-colors bg-gray-100 rounded-t-md border border-gray-100 hover:bg-orange-400 hover:border-orange-400 z-20 overflow-hidden group-hover:bg-orange-400 ${className} ${isHovered ? "bg-orange-400 border-orange-400" : ""}`}
+        className={`relative h-full flex text-gray-600 hover:text-gray-600 transition-colors bg-gray-100 rounded-t-md border border-gray-100 hover:bg-orange-400 hover:border-orange-400 z-20 overflow-hidden group-hover:bg-orange-400 ${className} ${
+          isHovered ? "bg-orange-400 border-orange-400" : ""
+        }`}
       >
         <div className="h-full flex items-end">
           <div className="absolute bottom-66 left-1/2 transform -translate-x-1/2 whitespace-nowrap -rotate-90">
@@ -82,7 +93,7 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({
             <Pencil size={15} strokeWidth={2.5} />
           </button>
           <button
-            // onClick={() => onDelete(bookmark.id)}
+            onClick={handleDelete}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             className="flex-1 rounded-br-md px-2 py-1 text-xs text-gray-800 hover:bg-gray-100 cursor-pointer"
