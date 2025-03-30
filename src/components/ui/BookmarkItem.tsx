@@ -17,16 +17,20 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({
 
   return (
     <Link
-      ref={itemRef}
-      href={bookmark.url}
-      target="_blank"
-      className={`h-full flex justify-center items-center text-gray-400 hover:text-gray-600 transition-colors bg-orange-100 rounded-md border border-gray-100 hover:bg-blue-50 z-20 ${className}`}
+  ref={itemRef}
+  href={bookmark.url}
+  target="_blank"
+  className={`relative h-full flex text-gray-400 hover:text-gray-600 transition-colors bg-orange-100 rounded-md border border-gray-100 hover:bg-blue-50 z-20 ${className}`}
+>
+  <div className="absolute bottom-44 left-0 right-0 h-full flex items-center">
+    <div 
+      className="absolute bottom-20 left-1/2 -translate-x-1/2 whitespace-nowrap -rotate-90"
     >
-      <div className="-rotate-90 mt-20 flex items-center justify-center ">
-        <span className="text-xl tracking-wider whitespace-nowrap">
-          {bookmark.url.replace(/^https?:\/\//, "")}
-        </span>
-      </div>
-    </Link>
+      <span className="text-xl tracking-wider truncate block w-[500px]">
+        {bookmark.url}
+      </span>
+    </div>
+  </div>
+</Link>
   );
 };
