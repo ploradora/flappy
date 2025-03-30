@@ -4,7 +4,6 @@ import { BookmarkForm } from "@/components/ui/BookmarkForm";
 import { BookmarksList } from "@/components/ui/BookmarksList";
 import { Bookmark } from "@/types";
 import { useEffect, useState, useRef, useMemo } from "react";
-import { gsap } from "gsap";
 import { pageTransition, showSuccessMessage } from "@/utils/animations";
 import { getBookmarks, addBookmark } from "@/app/actions";
 
@@ -20,12 +19,6 @@ export const OverviewContent = () => {
     // Initialize page animations
     if (pageRef.current) {
       pageTransition(pageRef.current);
-
-      gsap.fromTo(
-        ".page-title",
-        { y: -20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: "back.out(1.7)" }
-      );
     }
   }, []);
 

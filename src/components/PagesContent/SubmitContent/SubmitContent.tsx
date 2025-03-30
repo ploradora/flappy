@@ -167,7 +167,7 @@ export const SubmitContent = () => {
               <button
                 type="button"
                 onClick={handleClearInput}
-                className="flex-1 px-5 py-2 border bg-zinc-500 border-zinc-500 text-gray-100 rounded-md hover:bg-zinc-600 text-sm hover:border-zinc-600 cursor-pointer"
+                className="flex-1 px-5 py-2 border border-zinc-600 text-gray-100 rounded-md hover:bg-zinc-700 text-sm hover:border-zinc-600 cursor-pointer"
               >
                 Clear
               </button>
