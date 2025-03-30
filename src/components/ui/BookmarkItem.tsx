@@ -9,13 +9,13 @@ import { deleteBookmark } from "@/app/actions";
 interface BookmarkItemProps {
   bookmark: Bookmark;
   className?: string;
-  onDelete: (id: string) => void;
+  // onDelete: (id: string) => void;
 }
 
 export const BookmarkItem: React.FC<BookmarkItemProps> = ({
   bookmark,
   className = "",
-  onDelete,
+  // onDelete,
 }) => {
   const itemRef = useRef<HTMLAnchorElement>(null);
   const linkButtonsRef = useRef<HTMLDivElement>(null);
@@ -26,16 +26,15 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({
         gsap.to(linkButtonsRef.current, {
           y: 0,
           opacity: 1,
-          duration: 0.10,
+          duration: 0.1,
           ease: "power3.out",
         });
       }}
-      
       onMouseLeave={() => {
         gsap.to(linkButtonsRef.current, {
           y: -20, // slide down slightly before fading
           opacity: 0,
-          duration: 0.10,
+          duration: 0.1,
           ease: "power2.inOut",
         });
       }}
@@ -65,13 +64,13 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({
             onClick={(e) => {
               e.preventDefault();
             }}
-            className="flex-1 rounded-l-md px-2 py-1 text-xs text-gray-800 hover:bg-orange-500 cursor-pointer"
+            className="flex-1 rounded-bl-md px-2 py-1 text-xs text-gray-800 hover:bg-gray-100 cursor-pointer"
           >
             <Pencil size={15} />
           </button>
           <button
-            onClick={() => onDelete(bookmark.id)}
-            className="flex-1 rounded-r-md  px-2 py-1 text-xs text-gray-800 hover:bg-orange-500 cursor-pointer"
+            // onClick={() => onDelete(bookmark.id)}
+            className="flex-1 rounded-br-md  px-2 py-1 text-xs text-gray-800 hover:bg-gray-100 cursor-pointer"
           >
             <Trash size={15} />
           </button>

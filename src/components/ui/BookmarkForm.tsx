@@ -239,7 +239,7 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   placeholder="https://example.com"
-                  className="w-full pl-6 pr-4 py-2.5 border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-500 transition-all text-zinc-50 bg-zinc-600 hover:bg-zinc-500 focus:bg-zinc-500"
+                  className="w-full pl-6 pr-4 py-2.5 border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-500 transition-all text-gray-100 bg-zinc-600 hover:bg-zinc-500 focus:bg-zinc-500"
                   required
                 />
                 <div className="relative flex justify-between">

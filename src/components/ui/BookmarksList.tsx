@@ -18,9 +18,9 @@ const getColumnCount = () => {
   return 4; // default base
 };
 
-export const BookmarksList = ({ bookmarks: initialBookmarks }: BookmarksListProps) => {
+export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [bookmarks, setBookmarks] = useState<Bookmark[]>(initialBookmarks);
+  // const [bookmarks, setBookmarks] = useState<Bookmark[]>(initialBookmarks);
   const [displayedBookmarks, setDisplayedBookmarks] = useState<Bookmark[]>([]);
   const listRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<HTMLDivElement>(null);
@@ -142,10 +142,10 @@ export const BookmarksList = ({ bookmarks: initialBookmarks }: BookmarksListProp
     }
   };
 
-  const handleDelete = (id: string) => {
-    deleteBookmark(id); // Remove from localStorage
-    setBookmarks(prev => prev.filter(b => b.id !== id)); // Update state
-  };
+  // const handleDelete = (id: string) => {
+  //   deleteBookmark(id); // Remove from localStorage
+  //   setBookmarks(prev => prev.filter(b => b.id !== id)); // Update state
+  // };
 
   return (
     <>
@@ -188,7 +188,7 @@ export const BookmarksList = ({ bookmarks: initialBookmarks }: BookmarksListProp
                     <BookmarkItem
                       key={bookmark.id}
                       bookmark={bookmark}
-                      onDelete={handleDelete}
+                      // onDelete={handleDelete}
                       className="bookmark-anim"
                     />
                   ) : (
@@ -199,9 +199,9 @@ export const BookmarksList = ({ bookmarks: initialBookmarks }: BookmarksListProp
 
               {/* EMPTY STATE MESSAGE */}
               {bookmarks.length === 0 && (
-                <div className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none">
-                  <div className="rounded-md bg-gray-50 p-4 text-center">
-                    <h3 className="text-base font-medium text-gray-500">
+                <div className="absolute inset-0 z-20 flex items-center justify-center">
+                  <div className="rounded-md bg-zinc-800 p-10 border border-zinc-700 text-center">
+                    <h3 className="text-base font-medium text-gray-200">
                       You don't have any links added yet
                     </h3>
                     <p className="text-sm text-gray-400 mt-1">

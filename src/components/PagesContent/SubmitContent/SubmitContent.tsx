@@ -133,21 +133,23 @@ export const SubmitContent = () => {
   return (
     <div className="flex w-full h-full">
       <BookmarksSubmitList />
-
-      <div className="relative flex-1 grid place-items-center bg-white">
-      <Link href="/overview" className="absolute top-4 left-4 text-sm text-gray-500 flex items-center gap-2">
+      <div className="relative flex-1 grid place-items-center bg-zinc-900">
+        <Link
+          href="/overview"
+          className="absolute top-4 left-4 text-sm text-gray-100 hover:text-gray-300 flex items-center gap-2"
+        >
           <ArrowLeft size={18} />
           <span className="text-sm">Back</span>
         </Link>
         <div className="h-[300px]">
-          <h1 className="text-xl font-bold mb-3 text-center text-gray-800">
+          <h1 className="text-xl font-bold mb-3 text-center text-gray-100">
             Check Your URL
           </h1>
 
           <form
             ref={formRef}
             onSubmit={handleSubmit}
-            className="bg-white p-4 mb-2 rounded-lg shadow-md border border-gray-100 w-[350px] z-30"
+            className="bg-zinc-800 p-4 mb-2 rounded-lg shadow-md border border-zinc-800 w-[350px] z-30"
           >
             <div className="mb-4">
               <input
@@ -157,7 +159,7 @@ export const SubmitContent = () => {
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 placeholder="https://example.com"
-                className="w-full px-4 py-2 border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                className="w-full px-4 py-2 border bg-zinc-600 border-zinc-600 text-gray-50 rounded-md focus:outline-none focus:ring-2 focus:ring-zinc-500 transition-all"
                 disabled={isSubmitting}
               />
             </div>
@@ -165,7 +167,7 @@ export const SubmitContent = () => {
               <button
                 type="button"
                 onClick={handleClearInput}
-                className="flex-1 px-5 py-2 border border-gray-200 text-gray-500 rounded-md hover:bg-gray-100 text-sm cursor-pointer"
+                className="flex-1 px-5 py-2 border bg-zinc-500 border-zinc-500 text-gray-100 rounded-md hover:bg-zinc-600 text-sm hover:border-zinc-600 cursor-pointer"
               >
                 Clear
               </button>
@@ -173,7 +175,7 @@ export const SubmitContent = () => {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`flex-1 px-5 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-all border border-glue-500 cursor-pointer ${
+                className={`flex-1 px-5 py-2 bg-zinc-700 text-white rounded-md hover:bg-orange-500 transition-all border border-zinc-700 hover:border-orange-500 cursor-pointer ${
                   isSubmitting ? "opacity-70 cursor-not-allowed" : ""
                 } text-sm font-medium`}
               >
