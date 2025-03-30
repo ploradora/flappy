@@ -1,11 +1,10 @@
 "use client";
 
 import { getBookmarks } from "@/app/actions";
-import { Globe } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Bookmark } from "@/types";
-
+import { ArrowLeft } from "lucide-react";
 // Create a custom event for URL check submission
 export const URL_CHECK_EVENT = "url-check-submission";
 
@@ -58,7 +57,8 @@ export const BookmarksSubmitList = () => {
 
   return (
     <div className="flex-1 border-r h-[calc(100vh_-_52px)] bg-white border-gray-200 flex flex-col overflow-hidden">
-      <div className="p-4 border-b border-gray-200 bg-white">
+      <div className="p-4 border-b border-gray-200 bg-white flex items-center justify-between">
+        <div>
         <h2 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
           Your Have
           <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">
@@ -66,6 +66,7 @@ export const BookmarksSubmitList = () => {
           </span>
           Bookmarks
         </h2>
+        </div>
       </div>
 
       {bookmarks.length === 0 ? (

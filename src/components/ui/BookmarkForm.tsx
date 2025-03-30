@@ -186,15 +186,14 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
         <div
           onMouseEnter={() => {
             const tl = gsap.timeline();
-          
-            
+
             // Slide the whole container
             tl.to(navButtonsRef.current, {
               x: 101,
               duration: 0.3,
               ease: "power2.out",
             });
-          
+
             // Party button bounces within its new position
             tl.to(
               navButtonRefParty.current,
@@ -204,25 +203,21 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
                 ease: "power1.out",
               },
               "-=0.20"
-            ).to(
-              navButtonRefParty.current,
-              {
-                x: 0,
-                ease: "back.out(1.7)",
-              },
-            );
+            ).to(navButtonRefParty.current, {
+              x: 0,
+              ease: "back.out(1.7)",
+            });
           }}
-          
           onMouseLeave={() => {
             const tl = gsap.timeline();
-          
+
             // Reset all back to original
             tl.to([navButtonRefParty.current, navButtonRefSend.current], {
               x: 0,
               duration: 0.15,
               ease: "power2.inOut",
             });
-          
+
             tl.to(navButtonsRef.current, {
               x: 0,
               duration: 0.3,
@@ -247,7 +242,7 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
                   className="w-full pl-6 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-gray-800 bg-gray-50 hover:bg-white focus:bg-white"
                   required
                 />
-                <div className="flex justify-between">
+                <div className="relative flex justify-between">
                   <button
                     type="submit"
                     disabled={isSubmitting}
@@ -267,24 +262,37 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
             ref={navButtonsRef}
             className="absolute top-1/2 transform -translate-y-1/2 right-0 flex justify-end gap-1 items-center z-10 w-[120px] h-[50px]"
           >
-            <button
-              ref={navButtonRefSend}
-              onClick={() => router.push("/submit")}
-              className="w-[46px] h-[46px] text-gray-600 text-sm rounded-md p-2 bg-blue-100 cursor-pointer"
-            >
-              <span className="flex items-center justify-center">
-                <Send size={19} />
-              </span>
-            </button>
-            <button
-              ref={navButtonRefParty}
-              onClick={() => router.push("/results")}
-              className="w-[46px] h-[46px] text-gray-600 text-sm rounded-md p-2 bg-blue-100 cursor-pointer"
-            >
-              <span className="flex items-center justify-center">
-                <PartyPopper size={19} />
-              </span>
-            </button>
+            {/* Send Button with Tooltip */}
+            <div className="relative">
+              <button
+                ref={navButtonRefSend}
+                onClick={() => router.push("/submit")}
+                className="peer w-[46px] h-[46px] text-gray-600 text-sm rounded-md p-2 bg-blue-100 cursor-pointer"
+              >
+                <span className="flex items-center justify-center">
+                  <Send size={19} />
+                </span>
+              </button>
+              <div className="absolute left-1/2 transform -translate-x-1/2 -top-9 px-2 py-1 text-xs bg-blue-600 text-white rounded opacity-0 peer-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                Submit page
+              </div>
+            </div>
+
+            {/* Party Button with Tooltip */}
+            <div className="relative">
+              <button
+                ref={navButtonRefParty}
+                onClick={() => router.push("/results")}
+                className="peer w-[46px] h-[46px] text-gray-600 text-sm rounded-md p-2 bg-blue-100 cursor-pointer"
+              >
+                <span className="flex items-center justify-center">
+                  <PartyPopper size={19} />
+                </span>
+              </button>
+              <div className="absolute left-1/2 transform -translate-x-1/2 -top-9 px-2 py-1 text-xs bg-blue-600 text-white rounded opacity-0 peer-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+                Results page
+              </div>
+            </div>
           </div>
         </div>
 

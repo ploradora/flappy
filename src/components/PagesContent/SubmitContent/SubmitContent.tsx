@@ -3,7 +3,8 @@
 import { FormEvent, useState, useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { getBookmarks } from "@/app/actions";
-import { Ban } from "lucide-react";
+import { ArrowLeft, Ban } from "lucide-react";
+import Link from "next/link";
 import { BookmarksSubmitList, URL_CHECK_EVENT } from "./BookmarksSubmitList";
 
 export const SubmitContent = () => {
@@ -133,7 +134,11 @@ export const SubmitContent = () => {
     <div className="flex w-full h-full">
       <BookmarksSubmitList />
 
-      <div className="flex-1 grid place-items-center bg-white">
+      <div className="relative flex-1 grid place-items-center bg-white">
+      <Link href="/overview" className="absolute top-4 left-4 text-sm text-gray-500 flex items-center gap-2">
+          <ArrowLeft size={18} />
+          <span className="text-sm">Back</span>
+        </Link>
         <div className="h-[300px]">
           <h1 className="text-xl font-bold mb-3 text-center text-gray-800">
             Check Your URL

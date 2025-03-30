@@ -13,7 +13,7 @@ export const ResultsContent = () => {
   const cardRef = useRef<HTMLDivElement>(null);
   const iconRef = useRef<HTMLDivElement>(null);
   const detailsRef = useRef<HTMLDivElement>(null);
-  const [lastSubmission, setLastSubmission] = useState('');
+  const [lastSubmission, setLastSubmission] = useState("");
 
   useEffect(() => {
     const modifyAllLinks = [...getBookmarks()].sort(
@@ -29,7 +29,6 @@ export const ResultsContent = () => {
   }, []);
 
   useEffect(() => {
-
     // Run animations after component mounts
     const animateContent = () => {
       // Main timeline
@@ -118,10 +117,10 @@ export const ResultsContent = () => {
             <p className="text-gray-600 text-center">
               Your latest submission was:
             </p>
-            <Link 
+            <Link
               href={lastSubmission}
               target="_blank"
-              className=" flex justify-center items-center text-gray-600 font-bold text-xl pt-2 mb-6"
+              className="block text-center text-gray-600 font-bold text-xl pt-2 mb-6 truncate max-w-full overflow-hidden whitespace-nowrap"
             >
               {lastSubmission}
             </Link>
