@@ -180,7 +180,7 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
   return (
     <div className="max-w-[450px] m-auto flex flex-col justify-start h-[150px]">
       <div>
-        <h1 className="font-bold py-2 text-center text-gray-600">
+        <h1 className="font-bold py-2 text-center text-gray-200">
           Add a bookmark
         </h1>
         <div
@@ -228,7 +228,7 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
         >
           <form
             onSubmit={handleSubmit}
-            className="absolute top-0 right-0 w-full bg-white p-2 rounded-lg shadow-sm border border-gray-100 transition-all hover:shadow-md relative overflow-hidden z-30"
+            className="absolute top-0 right-0 w-full bg-zinc-800 p-2 rounded-lg shadow-sm border border-zinc-800 transition-all hover:shadow-md relative overflow-hidden z-30"
           >
             <div className="space-y-5">
               <div className="input-group flex items-center gap-2">
@@ -239,14 +239,14 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   placeholder="https://example.com"
-                  className="w-full pl-6 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-gray-800 bg-gray-50 hover:bg-white focus:bg-white"
+                  className="w-full pl-6 pr-4 py-2.5 border border-zinc-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-zinc-500 transition-all text-zinc-50 bg-zinc-600 hover:bg-zinc-500 focus:bg-zinc-500"
                   required
                 />
                 <div className="relative flex justify-between">
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`h-[46px] w-[46px] bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-center cursor-pointer`}
+                    className={`h-[46px] w-[46px] bg-zinc-700 hover:bg-orange-500 text-white rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 flex items-center justify-center cursor-pointer`}
                   >
                     {isSubmitting ? (
                       <Loader size={18} className="animate-spin" />
@@ -267,13 +267,13 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
               <button
                 ref={navButtonRefSend}
                 onClick={() => router.push("/submit")}
-                className="peer w-[46px] h-[46px] text-gray-600 text-sm rounded-md p-2 bg-blue-100 cursor-pointer"
+                className="peer w-[46px] h-[46px] text-gray-100 text-sm rounded-md p-2 bg-zinc-700 hover:bg-orange-500 cursor-pointer"
               >
                 <span className="flex items-center justify-center">
                   <Send size={19} />
                 </span>
               </button>
-              <div className="absolute left-1/2 transform -translate-x-1/2 -top-9 px-2 py-1 text-xs bg-blue-600 text-white rounded opacity-0 peer-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+              <div className="absolute left-1/2 transform -translate-x-1/2 -top-9 px-2 py-1 text-xs bg-gray-600 text-white rounded opacity-0 peer-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
                 Submit page
               </div>
             </div>
@@ -283,13 +283,13 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
               <button
                 ref={navButtonRefParty}
                 onClick={() => router.push("/results")}
-                className="peer w-[46px] h-[46px] text-gray-600 text-sm rounded-md p-2 bg-blue-100 cursor-pointer"
+                className="peer w-[46px] h-[46px] text-gray-100 text-sm rounded-md p-2 bg-zinc-700 hover:bg-orange-500 cursor-pointer"
               >
                 <span className="flex items-center justify-center">
                   <PartyPopper size={19} />
                 </span>
               </button>
-              <div className="absolute left-1/2 transform -translate-x-1/2 -top-9 px-2 py-1 text-xs bg-blue-600 text-white rounded opacity-0 peer-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
+              <div className="absolute left-1/2 transform -translate-x-1/2 -top-9 px-2 py-1 text-xs bg-gray-600 text-white rounded opacity-0 peer-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
                 Results page
               </div>
             </div>

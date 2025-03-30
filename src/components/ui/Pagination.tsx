@@ -86,7 +86,7 @@ export const Pagination = ({
         </svg>
       </button>
 
-      <div className="w-full h-px bg-gray-100 my-1"></div>
+      <div className="w-full h-px bg-zinc-600 mb-2 mt-1"/>
 
       {getPageNumbers().map((page, index) =>
         page === "..." ? (
@@ -104,8 +104,8 @@ export const Pagination = ({
             }
             className={`h-8 w-8 rounded-md focus:outline-none transition-colors text-sm cursor-pointer flex items-center justify-center ${
               page === selectedPage
-                ? "bg-blue-50 text-blue-600 border border-blue-200 font-medium"
-                : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+                ? "bg-zinc-500 text-white border border-zinc-500 font-medium hover:bg-gray-400"
+                : "text-gray-300 hover:bg-zinc-700 hover:text-gray-200"
             }`}
             aria-label={`Page ${page}`}
             aria-current={page === selectedPage ? "page" : undefined}
@@ -115,7 +115,7 @@ export const Pagination = ({
         )
       )}
 
-      <div className="w-full h-px bg-gray-100 my-1"></div>
+<div className="w-full h-px bg-zinc-600 mt-2 mb-1"/>  
 
       <button
         onClick={() =>

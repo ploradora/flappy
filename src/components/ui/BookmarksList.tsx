@@ -154,7 +154,7 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
         )}
 
         {hasMounted && (
-          <div ref={listRef} className="relative bg-gray-50 mt-4 h-full w-full">
+          <div ref={listRef} className="relative mt-4 h-full w-full p-1 rounded-lg">
             <div className="relative w-full h-full">
               {/* BACKGROUND GRID */}
               <div
@@ -164,7 +164,7 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
                 {Array.from({ length: columnCount }).map((_, i) => (
                   <div
                     key={`grid-bg-${i}`}
-                    className="border-2 border-dashed border-gray-200 rounded-md"
+                    className="border-2 border-dashed border-zinc-700 rounded-t-md"
                   />
                 ))}
               </div>
