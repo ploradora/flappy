@@ -3,20 +3,22 @@
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { Bookmark } from "../../types";
 import { gsap } from "gsap";
-import { Ban, Loader, Send, CheckCircle } from "lucide-react";
+import { Ban, Loader, Send, CheckCircle, Plus, Link, PartyPopper } from "lucide-react";
 import { getBookmarks } from "@/app/actions";
-
+import { useRouter } from "next/navigation";
 interface BookmarkFormProps {
   onSubmit: (bookmark: Omit<Bookmark, "id" | "createdAt">) => void;
 }
 
 export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
+  const router = useRouter();
   const [url, setUrl] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
 
+  const navButtonRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const urlInputRef = useRef<HTMLInputElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
@@ -171,43 +173,66 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
         <h1 className="font-bold py-2 text-center text-gray-600">
           Add a bookmark
         </h1>
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white p-2 rounded-lg shadow-sm mb-2 border border-gray-100 transition-all hover:shadow-md relative overflow-hidden z-30"
-        >
-          <div className="space-y-5">
-            <div className="input-group flex items-center gap-2">
-              <input
-                ref={urlInputRef}
-                type="text"
-                id="url"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                placeholder="https://example.com"
-                className="w-full pl-6 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-gray-800 bg-gray-50 hover:bg-white focus:bg-white"
-                required
-              />
-              <div className="flex justify-between">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`h-[46px] w-[46px] bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-center cursor-pointer`}
-                >
-                  {isSubmitting ? (
-                    <Loader size={18} className="animate-spin" />
-                  ) : (
-                    <Send size={19} />
-                  )}
-                </button>
+        <div className="relative flex justify-center items-center">
+          <form
+            onSubmit={handleSubmit}
+            className="absolute top-0 right-0 w-full bg-white p-2 rounded-lg shadow-sm border border-gray-100 transition-all hover:shadow-md relative overflow-hidden z-30"
+          >
+            <div className="space-y-5">
+              <div className="input-group flex items-center gap-2">
+                <input
+                  ref={urlInputRef}
+                  type="text"
+                  id="url"
+                  value={url}
+                  onChange={(e) => setUrl(e.target.value)}
+                  placeholder="https://example.com"
+                  className="w-full pl-6 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all text-gray-800 bg-gray-50 hover:bg-white focus:bg-white"
+                  required
+                />
+                <div className="flex justify-between">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className={`h-[46px] w-[46px] bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 flex items-center justify-center cursor-pointer`}
+                  >
+                    {isSubmitting ? (
+                      <Loader size={18} className="animate-spin" />
+                    ) : (
+                      <Plus size={19} />
+                    )}
+                  </button>
+                </div>
               </div>
             </div>
+          </form>
+          <div 
+            ref={navButtonRef}
+            className="absolute top-1/2 transform -translate-y-1/2 right-0 flex justify-center gap-1 items-center"
+          >
+            <button
+              onClick={() => router.push("/results")}
+              className="w-[46px] h-[46px] text-gray-600 text-sm rounded-md p-2 bg-blue-100"
+            >
+              <span className="flex items-center justify-center">
+                <Send size={19} />
+              </span>
+            </button>
+            <button
+              onClick={() => router.push("/results")}
+              className="w-[46px] h-[46px] text-gray-600 text-sm rounded-md p-2 bg-blue-100"
+            >
+              <span className="flex items-center justify-center">
+                <PartyPopper size={19} />
+              </span>
+            </button>
           </div>
-        </form>
+        </div>
 
         {error && (
           <div
             ref={errorRef}
-            className="bg-yellow-50 border-1 text-sm border-yellow-400 text-yellow-700 pl-4 py-2 gap-2 rounded-md mb-2 flex items-center"
+            className="bg-yellow-50 border-1 text-sm border-yellow-400 text-yellow-700 pl-4 py-2 gap-2 rounded-md mb-2 mt-2 flex items-center"
           >
             <Ban size={18} />
             <span>{error}</span>
@@ -217,7 +242,7 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
         {success && (
           <div
             ref={successRef}
-            className="bg-green-50 border-1 text-sm border-green-400 text-green-700 pl-4 py-2 gap-2 rounded-md mb-2 flex items-center"
+            className="bg-green-50 border-1 text-sm border-green-400 text-green-700 pl-4 py-2 gap-2 rounded-md mb-2 mt-2 flex items-center"
           >
             <CheckCircle size={18} />
             <span>{success}</span>

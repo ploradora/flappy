@@ -5,7 +5,6 @@ import { Bookmark } from "../../types";
 import { BookmarkItem } from "./BookmarkItem";
 import { gsap } from "gsap";
 import { Pagination } from "./Pagination";
-import { NavButtons } from "./NavButtons";
 
 interface BookmarksListProps {
   bookmarks: Bookmark[];
@@ -207,7 +206,6 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
           </div>
         )}
       </div>
-      <NavButtons />
     </>
   );
 };
