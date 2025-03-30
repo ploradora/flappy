@@ -5,7 +5,7 @@ import { Bookmark } from "../../types";
 import { gsap } from "gsap";
 import { Ban, ChevronDown, Loader, Send } from "lucide-react";
 import { arrowShowForm } from "@/utils/animations";
-import { addBookmark } from "@/app/actions";
+import { addBookmark, getBookmarks } from "@/app/actions";
 import { NavButtons } from "./NavButtons";
 
 interface BookmarkFormProps {
@@ -39,15 +39,31 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
         { opacity: 0, y: -10 },
         { opacity: 1, y: 0, duration: 0.3, ease: "power2.out" }
       );
-
-      // Shake input if URL is invalid
+  
       if (error.includes("URL") && urlInputRef.current) {
         gsap.to(urlInputRef.current, {
           x: 5,
           duration: 0.1,
-          repeat: 3,
+          repeat: 5,  
           yoyo: true,
+          onComplete: () => {
+            setTimeout(() => {
+              gsap.to(errorRef.current, { 
+                opacity: 0, 
+                duration: 0.3,
+                y: -10 
+              });
+            }, 3000);
+          }
         });
+      } else {
+        setTimeout(() => {
+          gsap.to(errorRef.current, { 
+            opacity: 0, 
+            duration: 0.3,
+            y: -10 
+          });
+        }, 3000); 
       }
     }
   }, [error]);
@@ -68,10 +84,6 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
     }
   };
 
-  // const handleToggleForm = () => {
-  //   setIsOpen(!isOpen);
-  // };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
@@ -79,7 +91,12 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
       setError("Please enter a valid URL including http:// or https://");
       return;
     }
+    const allBookmarks = getBookmarks();
 
+    if (allBookmarks.some((bookmark) => bookmark.url === url)) {
+      setError("Bookmark already exists");
+      return;
+    }
     setError("");
     setIsSubmitting(true);
 
@@ -127,12 +144,12 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
   };
 
   return (
-    <div className="max-w-[450px] m-auto flex flex-col justify-center">
+    <div className="max-w-[450px] m-auto flex flex-col justify-start h-[150px]">
       <div>
+        <h1 className="font-bold py-2 text-center text-gray-600">Add a bookmark</h1>
         <form
-          // ref={formRef}
           onSubmit={handleSubmit}
-          className="bg-white p-2 rounded-lg shadow-md mb-2 border border-gray-100 transition-all hover:shadow-lg relative overflow-hidden"
+          className="bg-white p-2 rounded-lg shadow-sm mb-2 border border-gray-100 transition-all hover:shadow-md relative overflow-hidden z-30"
         >
           <div className="space-y-5">
             <div className="input-group flex items-center gap-2">
@@ -172,18 +189,15 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
             <span>{error}</span>
           </div>
         )}
-        <div
-          className="relative w-20 h-8 cursor-pointer m-auto"
-          // onClick={handleToggleForm}
-        >
-          <ChevronDown
-            ref={arrowDownRef}
-            size={35}
-            strokeWidth={2.5}
-            color="orange"
-            className="arrowShowForm absolute inset-0 m-auto"
-          />
-        </div>
+         {error && (
+          <div
+            ref={errorRef}
+            className="bg-yellow-50 border-1 text-sm border-yellow-400 text-yellow-700 pl-4 py-2 gap-2 rounded-md mb-2 flex items-center"
+          >
+            <Ban size={18} />
+            <span>{error}</span>
+          </div>
+        )}
       </div>
     </div>
   );
