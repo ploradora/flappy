@@ -21,6 +21,17 @@ export const bookmarkStorage = {
     }
   },
 
+  delete: (id: string): void => {
+    try {
+      const bookmarks = localStorage.getItem(STORAGE_KEY);
+      const parsedBookmarks = bookmarks ? JSON.parse(bookmarks) : [];
+      const filteredBookmarks = parsedBookmarks.filter((bookmark: Bookmark) => bookmark.id !== id);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(filteredBookmarks)); 
+    } catch (error) {
+      console.error("Error deleting bookmark from localStorage:", error);
+    }
+  },
+
   add: (bookmark: Bookmark): void => {
     try {
       const bookmarks = localStorage.getItem(STORAGE_KEY);

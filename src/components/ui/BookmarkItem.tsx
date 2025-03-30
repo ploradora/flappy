@@ -5,14 +5,17 @@ import { Bookmark } from "../../types";
 import Link from "next/link";
 import gsap from "gsap";
 import { Pencil, Trash } from "lucide-react";
+import { deleteBookmark } from "@/app/actions";
 interface BookmarkItemProps {
   bookmark: Bookmark;
   className?: string;
+  onDelete: (id: string) => void;
 }
 
 export const BookmarkItem: React.FC<BookmarkItemProps> = ({
   bookmark,
   className = "",
+  onDelete,
 }) => {
   const itemRef = useRef<HTMLAnchorElement>(null);
   const linkButtonsRef = useRef<HTMLDivElement>(null);
@@ -20,19 +23,20 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({
     <div
       className="relative group hover:bg-orange-400 rounded-t-md"
       onMouseEnter={() => {
-        const tl = gsap.timeline();
-
-        tl.to(linkButtonsRef.current, {
+        gsap.to(linkButtonsRef.current, {
           y: 0,
-          duration: 0.15,
+          opacity: 1,
+          duration: 0.10,
+          ease: "power3.out",
         });
       }}
+      
       onMouseLeave={() => {
-        const tl = gsap.timeline();
-
-        tl.to(linkButtonsRef.current, {
-          y: -15,
-          duration: 0.15,
+        gsap.to(linkButtonsRef.current, {
+          y: -20, // slide down slightly before fading
+          opacity: 0,
+          duration: 0.10,
+          ease: "power2.inOut",
         });
       }}
     >
@@ -54,22 +58,20 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({
       {/* Hover-revealed buttons BELOW the link */}
       <div
         ref={linkButtonsRef}
-        className="absolute w-full pt-1 left-0 flex opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none group-hover:pointer-events-auto"
+        className="absolute w-full pt-1 left-0 flex opacity-0 group-hover:opacity-100 transition-all pointer-events-none group-hover:pointer-events-auto"
       >
-        <div className="w-full flex items-center bg-orange-500 rounded-b-md">
+        <div className="w-full flex items-center bg-orange-400 rounded-b-md">
           <button
             onClick={(e) => {
               e.preventDefault();
             }}
-            className="flex-1 rounded-l-md px-2 py-1 text-xs text-gray-800 hover:bg-orange-600 cursor-pointer"
+            className="flex-1 rounded-l-md px-2 py-1 text-xs text-gray-800 hover:bg-orange-500 cursor-pointer"
           >
             <Pencil size={15} />
           </button>
           <button
-            onClick={(e) => {
-              e.preventDefault();
-            }}
-            className="flex-1 rounded-r-md  px-2 py-1 text-xs text-gray-800 hover:bg-orange-600 cursor-pointer"
+            onClick={() => onDelete(bookmark.id)}
+            className="flex-1 rounded-r-md  px-2 py-1 text-xs text-gray-800 hover:bg-orange-500 cursor-pointer"
           >
             <Trash size={15} />
           </button>

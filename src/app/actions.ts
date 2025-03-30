@@ -19,3 +19,7 @@ export function addBookmark({
   bookmarkStorage.add(newBookmark);
   return newBookmark;
 }
+
+export function deleteBookmark(id: string) {
+  bookmarkStorage.delete(id);   
+}

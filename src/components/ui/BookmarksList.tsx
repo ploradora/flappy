@@ -5,6 +5,7 @@ import { Bookmark } from "../../types";
 import { BookmarkItem } from "./BookmarkItem";
 import { gsap } from "gsap";
 import { Pagination } from "./Pagination";
+import { deleteBookmark } from "@/app/actions";
 
 interface BookmarksListProps {
   bookmarks: Bookmark[];
@@ -17,8 +18,9 @@ const getColumnCount = () => {
   return 4; // default base
 };
 
-export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
+export const BookmarksList = ({ bookmarks: initialBookmarks }: BookmarksListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [bookmarks, setBookmarks] = useState<Bookmark[]>(initialBookmarks);
   const [displayedBookmarks, setDisplayedBookmarks] = useState<Bookmark[]>([]);
   const listRef = useRef<HTMLDivElement>(null);
   const itemsRef = useRef<HTMLDivElement>(null);
@@ -140,6 +142,11 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
     }
   };
 
+  const handleDelete = (id: string) => {
+    deleteBookmark(id); // Remove from localStorage
+    setBookmarks(prev => prev.filter(b => b.id !== id)); // Update state
+  };
+
   return (
     <>
       <div className="relative flex h-[calc(100%_-_250px)] max-w-[1000px] m-auto">
@@ -181,6 +188,7 @@ export const BookmarksList = ({ bookmarks }: BookmarksListProps) => {
                     <BookmarkItem
                       key={bookmark.id}
                       bookmark={bookmark}
+                      onDelete={handleDelete}
                       className="bookmark-anim"
                     />
                   ) : (
