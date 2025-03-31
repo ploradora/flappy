@@ -81,14 +81,14 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <div className="w-full flex items-center bg-orange-400 rounded-b-md">
+        <div className="w-full flex items-center rounded-b-md">
           <button
             onClick={(e) => {
               e.preventDefault();
             }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            className="flex-1 rounded-bl-md px-2 py-1 text-xs text-gray-800 hover:bg-gray-100 cursor-pointer"
+            className="flex-1 rounded-bl-md px-2 py-1 text-xs text-gray-800 bg-orange-300 hover:bg-orange-400 cursor-pointer"
           >
             <Pencil size={15} strokeWidth={2.5} />
           </button>
@@ -96,7 +96,7 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({
             onClick={handleDelete}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            className="flex-1 rounded-br-md px-2 py-1 text-xs text-gray-800 hover:bg-gray-100 cursor-pointer"
+            className="flex-1 rounded-br-md px-2 py-1 text-xs text-gray-800 bg-orange-300 hover:bg-orange-400 cursor-pointer"
           >
             <Trash size={15} strokeWidth={2.5} />
           </button>

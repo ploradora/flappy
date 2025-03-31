@@ -6,11 +6,10 @@ import { gsap } from "gsap";
 import {
   Ban,
   Loader,
-  Send,
   CheckCircle,
   Plus,
-  Link,
   PartyPopper,
+  List,
 } from "lucide-react";
 import { getBookmarks } from "@/app/actions";
 import { useRouter } from "next/navigation";
@@ -246,7 +245,7 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className={`h-[46px] w-[46px] bg-zinc-700 hover:bg-orange-500 text-white rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 flex items-center justify-center cursor-pointer`}
+                    className={`h-[46px] w-[46px] bg-zinc-700 hover:bg-blue-500 text-white rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-orange-500 flex items-center justify-center cursor-pointer`}
                   >
                     {isSubmitting ? (
                       <Loader size={18} className="animate-spin" />
@@ -270,7 +269,7 @@ export const BookmarkForm = ({ onSubmit }: BookmarkFormProps) => {
                 className="peer w-[46px] h-[46px] text-gray-100 text-sm rounded-md p-2 bg-zinc-700 hover:bg-orange-500 cursor-pointer"
               >
                 <span className="flex items-center justify-center">
-                  <Send size={19} />
+                  <List size={19} />
                 </span>
               </button>
               <div className="absolute left-1/2 transform -translate-x-1/2 -top-9 px-2 py-1 text-xs bg-gray-600 text-white rounded opacity-0 peer-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
