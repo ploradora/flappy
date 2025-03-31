@@ -168,9 +168,31 @@ export const BookmarksSubmitList = () => {
       </div>
 
       {bookmarks.length === 0 ? (
-        <div className="flex-1 flex items-center justify-center p-6 text-center">
-          <div className="max-w-xs">
-            <LoaderCircle className="animate-spin text-gray-100" />
+        <div className="relative flex-1 overflow-y-auto scrollbar-thin">
+          <div className="absolute inset-0 z-0 flex flex-col w-full gap-1 pointer-events-none p-4 overflow-y-auto">
+            {Array.from({ length: 30 }).map((_, i) => (
+              <div
+                key={`grid-bg-${i}`}
+                className="border-2 border-dashed border-zinc-700 rounded-md h-[52px] shrink-0"
+              />
+            ))}
+          </div>
+          <div className="absolute inset-0 z-20 flex items-center justify-center">
+            <div className="rounded-md bg-zinc-800 px-10 py-6 border border-zinc-700 text-center">
+              <h3 className="text-base font-medium text-gray-200">
+                You don't have any links added yet
+              </h3>
+              <p className="text-sm text-gray-400 mt-1 mb-5">
+                Try adding some links to get started.
+              </p>
+              <Link
+                href="/overview"
+                className="flex items-center gap-1 justify-center text-sm pt-4 font-bold text-blue-400 hover:text-blue-500"
+              >
+                <ArrowLeft size={16} />
+                <span>Overview</span>
+              </Link>
+            </div>
           </div>
         </div>
       ) : (
