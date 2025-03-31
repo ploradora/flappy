@@ -25,8 +25,10 @@ export const bookmarkStorage = {
     try {
       const bookmarks = localStorage.getItem(STORAGE_KEY);
       const parsedBookmarks = bookmarks ? JSON.parse(bookmarks) : [];
-      const filteredBookmarks = parsedBookmarks.filter((bookmark: Bookmark) => bookmark.id !== id);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(filteredBookmarks)); 
+      const filteredBookmarks = parsedBookmarks.filter(
+        (bookmark: Bookmark) => bookmark.id !== id
+      );
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(filteredBookmarks));
     } catch (error) {
       console.error("Error deleting bookmark from localStorage:", error);
     }
@@ -47,6 +49,8 @@ export const bookmarkStorage = {
       if (!exists) {
         parsedBookmarks.push(bookmark);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedBookmarks));
+      } else {
+        console.log("Bookmark already exists, not adding duplicate");
       }
     } catch (error) {
       console.error("Error adding bookmark to localStorage:", error);

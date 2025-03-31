@@ -88,17 +88,17 @@ export const BookmarkItem: React.FC<BookmarkItemProps> = ({
             }}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            className="flex-1 rounded-bl-md px-2 py-1 text-xs text-gray-800 bg-orange-300 hover:bg-orange-400 cursor-pointer"
+            className="flex-1 rounded-bl-md px-2 text-xs text-gray-800 bg-orange-300 hover:bg-orange-400 cursor-pointer py-3 md:py-2 lg:py-1"
           >
-            <Pencil size={15} strokeWidth={2.5} />
+            <Pencil size={15} strokeWidth={2.5} className="m-auto" />
           </button>
           <button
             onClick={handleDelete}
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
-            className="flex-1 rounded-br-md px-2 py-1 text-xs text-gray-800 bg-orange-300 hover:bg-orange-400 cursor-pointer"
+            className="flex-1  rounded-br-md px-2 text-xs text-gray-800 bg-orange-300 hover:bg-orange-400 cursor-pointer py-3 md:py-2 lg:py-1 "
           >
-            <Trash size={15} strokeWidth={2.5} />
+            <Trash size={15} strokeWidth={2.5} className="m-auto" />
           </button>
         </div>
       </div>

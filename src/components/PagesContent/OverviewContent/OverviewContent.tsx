@@ -54,10 +54,20 @@ export const OverviewContent = () => {
     }
   };
 
+  // Handle bookmark deletion
+  const handleDeleteBookmark = (id: string) => {
+    setBookmarks((prevBookmarks) =>
+      prevBookmarks.filter((bookmark) => bookmark.id !== id)
+    );
+  };
+
   return (
     <div ref={pageRef} className="relative mx-auto px-4 py-4 h-full">
       <BookmarkForm onSubmit={handleAddBookmark} />
-      <BookmarksList bookmarks={sortedBookmarks} />
+      <BookmarksList
+        bookmarks={sortedBookmarks}
+        onBookmarkDelete={handleDeleteBookmark}
+      />
     </div>
   );
 };

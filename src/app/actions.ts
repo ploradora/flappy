@@ -21,5 +21,5 @@ export function addBookmark({
 }
 
 export function deleteBookmark(id: string) {
-  bookmarkStorage.delete(id);   
+  bookmarkStorage.delete(id);
 }

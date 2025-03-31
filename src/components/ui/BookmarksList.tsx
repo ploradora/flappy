@@ -9,6 +9,7 @@ import { deleteBookmark } from "@/app/actions";
 
 interface BookmarksListProps {
   bookmarks: Bookmark[];
+  onBookmarkDelete?: (id: string) => void;
 }
 
 const getColumnCount = () => {
@@ -20,6 +21,7 @@ const getColumnCount = () => {
 
 export const BookmarksList = ({
   bookmarks: initialBookmarks,
+  onBookmarkDelete,
 }: BookmarksListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [bookmarks, setBookmarks] = useState<Bookmark[]>(initialBookmarks);
@@ -152,6 +154,11 @@ export const BookmarksList = ({
   const handleDelete = (id: string) => {
     // Update local state immediately for responsive UI
     setBookmarks((prev) => prev.filter((b) => b.id !== id));
+
+    // Notify parent component
+    if (onBookmarkDelete) {
+      onBookmarkDelete(id);
+    }
   };
 
   return (
